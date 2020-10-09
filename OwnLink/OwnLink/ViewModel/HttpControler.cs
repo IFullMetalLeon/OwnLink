@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Xamarin.Forms;
+using System.IO;
+using System.Linq;
+
+namespace OwnLink.ViewModel
+{
+    public static class HttpControler
+    {
+
+        public static string mainUrl = "https://ic.pismo-fsin.ru/";
+
+        public static async void register(string _phone,string _code,string _deviceId,string _deviceInfo)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(mainUrl + "register");
+            var values = new Dictionary<string, string>();
+            values.Add("phone", _phone);
+            if (_code != "")
+                values.Add("code", _code);
+            if (_deviceId != "")
+            {
+                values.Add("device_id", _deviceId);
+                values.Add("device_type", "android");
+                values.Add("device_info", _deviceInfo);
+            }
+
+            var response = await http.PostAsync(http.BaseAddress, new FormUrlEncodedContent(values));
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                MessagingCenter.Send<string, string>("HttpControler", "Register", content);
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send<string, string>("HttpControler", "Error", ex.Message);
+            }
+
+        }
+
+        public static async void feedbackSend(string _email,string _text,string _token,string _file)
+        {
+
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(mainUrl + "feedback");
+
+
+
+            var multiForm = new MultipartFormDataContent();
+
+            
+            multiForm.Add(new StringContent(_email), "email");
+            multiForm.Add(new StringContent(_text), "text");
+            multiForm.Add(new StringContent(_token), "token");
+
+            try
+            {
+                FileStream fs = File.OpenRead(_file);
+                multiForm.Add(new StreamContent(fs), "file", Path.GetFileName(_file));
+            }
+            catch(Exception ex) { }
+
+
+
+            var response = await http.PostAsync(http.BaseAddress, multiForm);
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                MessagingCenter.Send<string, string>("HttpControler", "Feedback", content);
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send<string, string>("HttpControler", "Error", ex.Message);
+            }
+        }
+
+        public static async void history(string _phone, string _deviceId)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(mainUrl + "history");
+            var values = new Dictionary<string, string>();
+            values.Add("phone", _phone);
+            values.Add("token", _deviceId);
+
+            var response = await http.PostAsync(http.BaseAddress, new FormUrlEncodedContent(values));
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                MessagingCenter.Send<string, string>("HttpControler", "History", content);
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send<string, string>("HttpControler", "Error", ex.Message);
+            }
+
+        }
+
+    }
+}

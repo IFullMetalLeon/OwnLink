@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="Вход в систему"
+             x:Class="OwnLink.View.LoginPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid BackgroundColor="#44c913">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" TextColor="White" FontSize="26" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Своя"/>
+                            <Span Text="&#x0a;"/>
+                            <Span Text="   Связь"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Frame Grid.Row="1" BackgroundColor="White" Margin="20,0,20,5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Entry x:Name="phoneEntry" Grid.Row="1" Placeholder="Номер телефона" Keyboard="Telephone" Text="{Binding Phone}" Margin="0"/>
+                        <Button x:Name="sendICall" Grid.Row="2" Text="{Binding ICallText}" IsEnabled="{Binding ICallEnb}" Command="{Binding ICallSend}" Margin="0"/>
+                    </Grid>
+                </Frame>
+                <Frame Grid.Row="2" BackgroundColor="White" Margin="20,0,20,5" IsVisible="{Binding IsCodeSmsVisible}">
+                    <Entry x:Name="codeSmsEntry" Placeholder="Код" Text="{Binding CodeSms}"  Keyboard="Numeric" TextChanged="codeSmsEntry_TextChanged" Margin="0"/>
+                </Frame>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

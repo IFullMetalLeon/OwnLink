@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OwnLink.View.MasterDetailMain">
+    <MasterDetailPage.Master>
+        <ContentPage Title="Меню">
+            <StackLayout>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Frame Grid.Row="0" Margin="3" CornerRadius="5" BackgroundColor="#44c913">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="1.5*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" TextColor="White" FontSize="26">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Своя"/>
+                                        <Span Text="&#x0a;"/>
+                                        <Span Text="   Связь"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Frame Grid.Row="1" Margin="0,3,0,3" BackgroundColor="White">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ChangePhone}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="phone" Grid.Column="0" Text="{Binding Phone}" TextColor="Black"/>
+                                    <Label Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE70F;" FontSize="16" TextColor="Black" />
+                                </Grid>
+                            </Frame>
+                            <Frame Grid.Row="2" Margin="0,3,0,3" BackgroundColor="White">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Reconnect}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="regStatus" Grid.Column="0" Text="{Binding RegStatus}" TextColor="{Binding RegTextColor}"/>
+                                    <Label Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE72C;" FontSize="16" TextColor="Black" />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="1">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="historyCall_Clicked"/>
+                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="8*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE780;" FontSize="20" />
+                            <Label Grid.Column="1" Text="История звонков" FontSize="16" />
+                        </Grid>
+                        </Frame>
+
+                        <Frame Grid.Row="2">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="setting_Clicked"/>
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="8*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE713;" FontSize="20" />
+                                <Label Grid.Column="1" Text="Настройки" FontSize="16" />
+                            </Grid>
+                        </Frame>
+                </Grid>
+            </StackLayout>
+        </ContentPage>
+    </MasterDetailPage.Master>
+    <MasterDetailPage.Detail>
+        <ContentPage>
+        </ContentPage>
+    </MasterDetailPage.Detail>
+</MasterDetailPage>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OwnLink.View.CallPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" />
+                <Label x:Name="codecCall" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Codec}" />
+                <Label x:Name="duration" Grid.Row="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}"/>
+                <Grid Grid.Row="3" IsVisible="{Binding IsIncoming}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="acceptCall" Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Green" Command="{Binding AcceptCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
+                    <Button x:Name="declineCall" Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Red" Command="{Binding CancelCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
+                </Grid>
+                <Grid Grid.Row="3" IsVisible="{Binding IsAccept}">
+                    <Button x:Name="cancelCall" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Red" Command="{Binding CancelCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
+                </Grid>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
