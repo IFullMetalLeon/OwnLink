@@ -18,44 +18,73 @@ namespace OwnLink.ViewModel
 {
     public class LoginPageViewModel : INotifyPropertyChanged
     {
-        ObservableCollection<string> CountryList { get; set; }
+        public class Countries
+        {
+            public string Name { get; set; }
+            public string Pref { get; set; }
+        }
+        public ObservableCollection<Countries> CountryList { get; set; }
+        public ObservableCollection<Countries> CounrtiesList { get; set; }
+        public Countries CounrtySelected { get; set; }
         public string _phone { get; set; }
         public string _codeSms { get; set; }
+        public string _countryName { get; set; }
+        public string _countrySelectArrow { get; set; }
+        public string _counrtySearchText { get; set; }
         public bool _isCodeSmsVisible { get; set; }
+        public bool _isNumberVisible { get; set; }
+        public bool _counrtyListVisible { get; set; }
         public string _iCallText { get; set; }
         public bool _iCallEnb { get; set; }
         public int _countdown;
         public int callFlag;
+        public string cPref;
 
         public ICallJournal callJournal;
         public INavigation Navigation { get; set; }
         public Command ICallSend { get; set; }
         public Command SendCode { get; set; }
+        public Command CountryTap { get; set; }
 
         public LoginPageViewModel()
         {
             ICallSend = new Command(sendCall);
             SendCode = new Command(sendCode);
+            CountryTap = new Command(CountryListShow);
             ICallText = "Запросить Интернет-звонок";
             ICallEnb = true;
-            Phone = "+7";
+            Phone = "";
+            cPref = "";
             IsCodeSmsVisible = false;
             callJournal = DependencyService.Get<ICallJournal>();
-            
+
+            CountryList = new ObservableCollection<Countries>();
+            CounrtiesList = new ObservableCollection<Countries>();
+            CounrtySelected = new Countries();
+
+            CountryList.Add(new Countries { Name = "Россия", Pref = "+7" });
+            CountryList.Add(new Countries { Name = "Белоруссия", Pref = "+375" });
+            CountryList.Add(new Countries { Name = "Украина", Pref = "+380" });
+            CountryList.Add(new Countries { Name = "Армения", Pref = "+374" });
+            CountryList.Add(new Countries { Name = "Афганистан", Pref = "+93" });
+            CountryList.Add(new Countries { Name = "Болгария", Pref = "+359" });
+            CountryList.Add(new Countries { Name = "Хорватия", Pref = "+385" });
+            CountryList.Add(new Countries { Name = "Грузия", Pref = "+995" });
+            CountryList.Add(new Countries { Name = "Казахстан", Pref = "+7" });
+            CountryList.Add(new Countries { Name = "Кыргызстан", Pref = "+996" });
+            CountryList.Add(new Countries { Name = "Таджикистан", Pref = "+992" });
+            CountryList.Add(new Countries { Name = "Узбекистан", Pref = "+998" });
+            CountryList.Add(new Countries { Name = "Югославия", Pref = "+381" });
 
         }
 
         public void startPage()
         {
-            //Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");            
+            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");            
             
             MessagingCenter.Subscribe<string, string>("HttpControler", "Register", (sender, arg) =>
             {
                 register(arg.Trim());
-            });
-            MessagingCenter.Subscribe<string, string>("broadcast", "incomingNumber", (sender, arg) =>
-            {
-                phoneNumber(arg.Trim());
             });
             MessagingCenter.Subscribe<string, string>("HttpControler", "Error", (sender, arg) =>
             {
@@ -64,12 +93,24 @@ namespace OwnLink.ViewModel
 
             callFlag = 0;
 
-            CountryList = new ObservableCollection<string>();
-            CountryList.Add("+7  Россия");
-            CountryList.Add("+380  Украина");
-            CountryList.Add("+375  Беларусь");
-            string lastPhone = callJournal.GetLastNumber();
+            CountryName = CrossSettings.Current.GetValueOrDefault("sipPhoneCountry", "");
+            cPref = CrossSettings.Current.GetValueOrDefault("sipPhoneCountryPref", "");
 
+            if (Phone == "")
+                Phone = cPref;
+
+            CounrtyListVisible = false;
+            CountrySelectArrow = "&#xE70D;";
+
+            if (CountryName == "")
+            {
+                IsNumberVisible = false;
+                CountryName = "Выбор страны";
+            }
+            else
+                IsNumberVisible = true;
+            CounrtySearchText = "";
+            SearchCountry();
         }
 
         public void endPage()
@@ -78,12 +119,6 @@ namespace OwnLink.ViewModel
             MessagingCenter.Unsubscribe<string, string>("HttpControler", "Error");
         }
 
-
-        public void phoneNumber(string _number)
-        {            
-            UserDialogs.Instance.Alert(_number);
-            CodeSms = _number.Substring(_number.Length - 6, 6);
-        }
         public void sendCall()
         {
             HttpControler.register(Phone, "","","");          
@@ -96,7 +131,7 @@ namespace OwnLink.ViewModel
         }
 
         public void sendCode()
-        {
+        {           
             string deviceId = CrossDeviceInfo.Current.Id;
             string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
             HttpControler.register(Phone, CodeSms, deviceId, deviceInfo);
@@ -127,6 +162,64 @@ namespace OwnLink.ViewModel
                 }
                 else
                     UserDialogs.Instance.Alert(tmp.message);
+            }
+        }
+
+        public void SearchCountry()
+        {
+            CounrtiesList.Clear();
+            foreach (Countries cur in CountryList)
+            {
+                if (cur.Name.Contains(CounrtySearchText))
+                    CounrtiesList.Add(cur);
+            }
+        }
+
+        public void CountryListShow()
+        {
+            if (!CounrtyListVisible)
+            {
+                CounrtyListVisible = true;
+                CountrySelectArrow = "&#xE70E;";
+            }
+            else
+            {
+                CounrtyListVisible = false;
+                CountrySelectArrow = "&#xE70D;";
+            }
+        }
+        public void SelectCountry()
+        {
+            if (CounrtySelected != null)
+            {
+                CountryName = CounrtySelected.Name;
+                CrossSettings.Current.AddOrUpdateValue("sipPhoneCountry", CountryName);
+                CrossSettings.Current.AddOrUpdateValue("sipPhoneCountryPref", CounrtySelected.Pref);
+                cPref = CounrtySelected.Pref;
+                Phone = cPref;
+                IsNumberVisible = true;
+                CounrtyListVisible = false;
+            }
+        }
+
+        public void checkPhone()
+        {
+            if (cPref == null)
+                cPref = "";
+            if (cPref.Length > 0)
+            {
+                if (Phone.Length < cPref.Length)
+                {
+                    Phone = cPref;
+                }
+                else
+                {
+                    string curPref = Phone.Substring(0, cPref.Length);
+                    if (curPref != cPref)
+                    {
+                        Phone = cPref + Phone.Substring(cPref.Length);
+                    }
+                }
             }
         }
 
@@ -203,6 +296,54 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public string CountryName
+        {
+            get
+            {
+                return _countryName;
+            }
+            set
+            {
+                if (_countryName != value)
+                {
+                    _countryName = value;
+                    OnPropertyChanged("CountryName");
+                }
+            }
+        }
+
+        public string CountrySelectArrow
+        {
+            get
+            {
+                return _countrySelectArrow;
+            }
+            set
+            {
+                if (_countrySelectArrow != value)
+                {
+                    _countrySelectArrow = value;
+                    OnPropertyChanged("CountrySelectArrow");
+                }
+            }
+        }
+
+        public string CounrtySearchText
+        {
+            get
+            {
+                return _counrtySearchText;
+            }
+            set
+            {
+                if (_counrtySearchText != value)
+                {
+                    _counrtySearchText = value;
+                    OnPropertyChanged("CounrtySearchText");
+                }
+            }
+        }
+
         public bool IsCodeSmsVisible
         {
             get
@@ -247,6 +388,38 @@ namespace OwnLink.ViewModel
                 {
                     _iCallEnb = value;
                     OnPropertyChanged("ICallEnb");
+                }
+            }
+        }
+
+        public bool IsNumberVisible
+        {
+            get
+            {
+                return _isNumberVisible;
+            }
+            set
+            {
+                if (_isNumberVisible != value)
+                {
+                    _isNumberVisible = value;
+                    OnPropertyChanged("IsNumberVisible");
+                }
+            }
+        }
+
+        public bool CounrtyListVisible
+        {
+            get
+            {
+                return _counrtyListVisible;
+            }
+            set
+            {
+                if (_counrtyListVisible != value)
+                {
+                    _counrtyListVisible = value;
+                    OnPropertyChanged("CounrtyListVisible");
                 }
             }
         }

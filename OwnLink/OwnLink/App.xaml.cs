@@ -29,6 +29,8 @@ namespace OwnLink
         {
             InitializeComponent();
 
+
+
             Manager = new LinphoneManager();
             Manager.Init(ConfigFilePath, FactoryFilePath, context);
             //CrossSettings.Current.AddOrUpdateValue("sipPhoneLogin", "");

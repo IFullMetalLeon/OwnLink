@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Media;
 using Android.OS;
 using Android.Support.V4.App;
 using OwnLink;
@@ -52,9 +53,15 @@ namespace OwnLink.Android
                 .SetContentIntent(pendingIntent)
                 .SetContentTitle(title)
                 .SetContentText(message)
-                .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.notification_tile_bg))
+                //.SetVisibility((int)NotificationVisibility.Public)
+                .SetCategory(Notification.CategoryCall)
+                .SetPriority((int)NotificationPriority.High)
+                .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_large))
                 .SetSmallIcon(Resource.Drawable.notification_tile_bg)
-                .SetDefaults((int)NotificationDefaults.All);
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
+                .SetVisibility(NotificationCompat.VisibilityPublic)
+                .SetAutoCancel(true);
+                //.SetDefaults((int)NotificationDefaults.All);
 
             var notification = builder.Build();
             manager.Notify(messageId, notification);

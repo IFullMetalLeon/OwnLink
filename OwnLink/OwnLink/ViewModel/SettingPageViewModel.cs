@@ -29,6 +29,7 @@ namespace OwnLink.ViewModel
         public string fileName;
         public string _userEmail { get; set; }
         public string _userMessage { get; set; }
+        public string _filePicker { get; set; }
 
         public SettingPageViewModel()
         {
@@ -48,6 +49,10 @@ namespace OwnLink.ViewModel
             {
                 showError(arg.Trim());
             });
+            FilePicker = "Выбор файла";
+            UserEmail = "";
+            UserMessage = "";
+            fileName = "";
         }
 
 
@@ -69,23 +74,34 @@ namespace OwnLink.ViewModel
                 return; // user canceled file picking
 
             fileName = fileData.FilePath;
+            FilePicker = "Выбран файл " + fileData.FileName;
             //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
         }
 
         public void sendMessage()
         {
             string deviceId = CrossDeviceInfo.Current.Id;
-            HttpControler.feedbackSend(UserEmail, UserMessage, deviceId, fileName);
+            HttpControler.feedbackSend(UserEmail, UserMessage, deviceId, fileName);          
         }
 
         public void feedbackResult(string content)
         {
-            UserDialogs.Instance.Alert(content);
+            if (content!=null && content.Length > 2)
+            {
+                textMessageJsonItem tmp = JsonConvert.DeserializeObject<textMessageJsonItem>(content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                if (tmp.status == "OK")
+                {
+                    UserDialogs.Instance.Alert(tmp.message);
+                    MessagingCenter.Send<string, string>("Call", "CallState", "End");
+                }
+                else
+                    UserDialogs.Instance.Alert(tmp.message, "Ошибка");
+            } 
         }
 
         public void showError(string error)
         {
-            UserDialogs.Instance.Alert(error);
+            UserDialogs.Instance.Alert(error);          
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -124,6 +140,22 @@ namespace OwnLink.ViewModel
                 {
                     _userMessage = value;
                     OnPropertyChanged("UserMessage");
+                }
+            }
+        }
+
+        public string FilePicker
+        {
+            get
+            {
+                return _filePicker;
+            }
+            set
+            {
+                if (_filePicker != value)
+                {
+                    _filePicker = value;
+                    OnPropertyChanged("FilePicker");
                 }
             }
         }

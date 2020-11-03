@@ -27,7 +27,7 @@
                         <Label Grid.Row="0" Text="Сообщите нам об ошибке" HorizontalTextAlignment="Center" Margin="0"/>
                         <Entry x:Name="userEmail" Grid.Row="1" Text="{Binding UserEmail}" Placeholder="Укажите свою почту" PlaceholderColor="Gray" Margin="0"/>
                         <Editor x:Name="userMessage" Grid.Row="2" BackgroundColor="#a5d6a7" HeightRequest="200" TextColor="Black" Text="{Binding UserMessage}" Margin="0"/>
-                        <Button x:Name="filePicker" Grid.Row="3" Text="Выбор файла" Command="{Binding filePick}" Margin="0"/>
+                        <Button x:Name="filePicker" Grid.Row="3" Text="{Binding FilePicker}" Command="{Binding filePick}" Margin="0"/>
                         <Button x:Name="sendMessage" Grid.Row="4" Text="Отправить" Command="{Binding sendMsg}" Margin="0"/>
                     </Grid>
                 </Frame>

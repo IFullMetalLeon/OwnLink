@@ -100,6 +100,7 @@
     <Compile Include="CallJournal.cs" />
     <Compile Include="iOSNotificationManager.cs" />
     <Compile Include="iOSPlaySystemService.cs" />
+    <Compile Include="iOSSpeakerPhone.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="Entitlements.plist" />
@@ -173,6 +174,9 @@
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings">
       <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.5.3.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>4.8.0.1534</Version>

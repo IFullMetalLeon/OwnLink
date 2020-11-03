@@ -27,9 +27,8 @@
                                     <FormattedString>
                                         <Span Text="Своя"/>
                                         <Span Text="&#x0a;"/>
-                                        <Span Text="   Связь"/>
-                                        <Span Text="&#x0a;"/>
-                                        <Span Text="G729"/>
+                                        <Span Text="   Связь    "/>
+                                        <Span Text="{Binding VersionNumber}"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
