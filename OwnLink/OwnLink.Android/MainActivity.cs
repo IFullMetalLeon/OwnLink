@@ -116,10 +116,10 @@ namespace OwnLink.Android
                 {
                     Permissions.Add(Manifest.Permission.RecordAudio);
                 }
-                /*if(CheckSelfPermission(Manifest.Permission.ReadCallLog) != Permission.Granted)
+                if(CheckSelfPermission(Manifest.Permission.ReadCallLog) != Permission.Granted)
                 {
                     Permissions.Add(Manifest.Permission.ReadCallLog);
-                }*/
+                }
                 if (Permissions.Count > 0)
                 {
                     RequestPermissions(Permissions.ToArray(), PERMISSIONS_REQUEST);

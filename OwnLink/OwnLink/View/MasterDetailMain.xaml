@@ -28,6 +28,8 @@
                                         <Span Text="Своя"/>
                                         <Span Text="&#x0a;"/>
                                         <Span Text="   Связь"/>
+                                        <Span Text="&#x0a;"/>
+                                        <Span Text="G729"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
