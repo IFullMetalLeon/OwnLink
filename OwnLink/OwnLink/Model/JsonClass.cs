@@ -30,5 +30,11 @@ namespace OwnLink.Model
             public string src { get; set; }
             public string disposition { get; set; }
         }
+
+        public class textMessageJsonItem
+        {
+            public string status { get; set; }
+            public string message { get; set; }
+        }
     }
 }

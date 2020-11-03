@@ -25,21 +25,30 @@ namespace OwnLink.ViewModel
         public int _duration { get; set; }
         public bool _isAccept { get; set; }
         public bool _isIncoming { get; set; }
+
+        public bool isSpeakerPhoneOn;
+
         public ICommand AcceptCall { get; set; }
         public ICommand CancelCall { get; set; }
+        public ICommand MuteCall { get; set; }
+        public ICommand SpeakerCall { get; set; }
         public INavigation Navigation { get; set; }
 
         public Call curCall;
 
-        IPlaySoundService playSoundService;
+        public IPlaySoundService playSoundService;
+        public ISpeakerPhone speakerPhone;
 
         public CallPageViewModel()
         {
 
             AcceptCall = new Command(accCall);
             CancelCall = new Command(cancelCall);
+            MuteCall = new Command(muteCall);
+            SpeakerCall = new Command(speakerCall);
 
             playSoundService = DependencyService.Get<IPlaySoundService>();
+            speakerPhone = DependencyService.Get<ISpeakerPhone>();
 
         }
 
@@ -51,7 +60,7 @@ namespace OwnLink.ViewModel
 
             if (curCall != null)
             {
-                Name = curCall.RemoteAddress.Username;
+                Name = curCall.RemoteAddress.DisplayName;
             }
             else
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
@@ -59,6 +68,7 @@ namespace OwnLink.ViewModel
             Duration = 0;
             IsAccept = false;
             IsIncoming = true;
+            isSpeakerPhoneOn = false;
 
             Codec = "Неизвестный кодек";
 
@@ -99,6 +109,28 @@ namespace OwnLink.ViewModel
             Core.TerminateAllCalls();
             playSoundService.StopSystemSound();
             MessagingCenter.Send<string, string>("Call", "CallState", "End");
+        }
+
+        public void muteCall()
+        {
+            if (curCall != null)
+            {
+                curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
+            }
+        }
+
+        public void speakerCall()
+        {
+            if (isSpeakerPhoneOn)
+            {
+                isSpeakerPhoneOn = false;
+                speakerPhone.SpeakerphoneOff();
+            }
+            else
+            {
+                isSpeakerPhoneOn = true;
+                speakerPhone.SpeakerphoneOn();
+            }
         }
 
         private bool OnTimerTick()

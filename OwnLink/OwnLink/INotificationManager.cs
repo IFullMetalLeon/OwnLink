@@ -25,4 +25,10 @@ namespace OwnLink
     {
         string GetLastNumber();
     }
+
+    public interface ISpeakerPhone
+    {
+        void SpeakerphoneOn();
+        void SpeakerphoneOff();
+    }
 }

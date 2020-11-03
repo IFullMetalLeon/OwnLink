@@ -12,6 +12,7 @@ using OwnLink.ViewModel;
 using System.Threading.Tasks;
 using Linphone;
 using Plugin.DeviceInfo;
+using Xamarin.Essentials;
 
 namespace OwnLink.ViewModel
 {
@@ -40,6 +41,7 @@ namespace OwnLink.ViewModel
         public string _pass { get; set; }
         public string _regStatus { get; set; }
         public string _regTextColor { get; set; }
+        public string _versionNumber { get; set; }
         public INavigation Navigation { get; set; }
         public Command ChangePhone { get; set; }
         public Command Reconnect { get; set; }
@@ -55,16 +57,24 @@ namespace OwnLink.ViewModel
             Core.Listener.OnRegistrationStateChanged += OnRegistration;
             Core.Listener.OnCallStateChanged += OnCall;
             Core.Listener.OnLogCollectionUploadStateChanged += OnLogCollectionUpload;
+
+            
         }
 
         public void startPage()
         {
+            MessagingCenter.Subscribe<string, string>("HttpControler", "GetServerVersion", (sender, arg) => {
+                checkVersion(arg.Trim());
+            });
+            HttpControler.GetServerVersion();
             string s = CrossDeviceInfo.Current.DeviceName;
             s = CrossDeviceInfo.Current.Model;
             s = CrossDeviceInfo.Current.Platform.ToString();
 
             Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
             _pass = CrossSettings.Current.GetValueOrDefault("sipPhonePass", "");
+
+            VersionNumber = CrossDeviceInfo.Current.AppVersion;
 
             //Phone = "leon2";
             //_pass = "BYMyt3rL8T9wfBdY";
@@ -125,6 +135,7 @@ namespace OwnLink.ViewModel
 
         public void endPage()
         {
+            MessagingCenter.Unsubscribe<string, string>("HttpControler", "GetServerVersion");
             //Core.Stop();
         }
 
@@ -133,6 +144,26 @@ namespace OwnLink.ViewModel
             Navigation.PushAsync(new LoginPage());
         }
 
+
+        public async void checkVersion(string versionNum)
+        {
+            string curVer = CrossDeviceInfo.Current.AppVersion;
+            if (curVer!=versionNum)
+            {
+                var result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Title = "Обновление",
+                    Message = "Доступна новая версия приложения",
+                    OkText = "Скачать",
+                    CancelText = "Отмена"
+                });
+                if (result)
+                {
+                    await Launcher.OpenAsync("http://ic.pismo-fsin.ru/upgrade/OwnLink.fsin.apk");
+                }               
+                    
+            }
+        }
 
         public void reconnect()
         {
@@ -198,7 +229,7 @@ namespace OwnLink.ViewModel
                         else
                         {
                             string userName = Core.CurrentCall.RemoteAddress.Username;
-                            notificationManager.ScheduleNotification("OwnLink","Входящий звонок " + userName);
+                            notificationManager.ScheduleNotification("Своя Связь","Входящий звонок " + userName);
                             MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
                         }
                     }
@@ -273,6 +304,22 @@ namespace OwnLink.ViewModel
                 {
                     _regTextColor = value;
                     OnPropertyChanged("RegTextColor");
+                }
+            }
+        }
+
+        public string VersionNumber
+        {
+            get
+            {
+                return _versionNumber;
+            }
+            set
+            {
+                if (_versionNumber != value)
+                {
+                    _versionNumber = value;
+                    OnPropertyChanged("VersionNumber");
                 }
             }
         }

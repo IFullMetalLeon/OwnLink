@@ -22,7 +22,7 @@ using Android.Provider;
 
 namespace OwnLink.Android
 {
-    [Activity(Label = "OwnLink", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "Своя Связь", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : FormsAppCompatActivity
     {
         int PERMISSIONS_REQUEST = 101;
@@ -97,7 +97,7 @@ namespace OwnLink.Android
             app.Core.VideoCaptureEnabled = true;
 
             instance = this;
-
+            
             LoadApplication(app);
             CreateNotificationFromIntent(Intent);
         }
@@ -108,6 +108,10 @@ namespace OwnLink.Android
             if (Int32.Parse(Build.VERSION.Sdk) >= 23)
             {
                 List<string> Permissions = new List<string>();
+                /*if (CheckSelfPermission(Manifest.Permission.AccessNotificationPolicy) != Permission.Granted)
+                {
+                    Permissions.Add(Manifest.Permission.AccessNotificationPolicy);
+                }*/
                 if (CheckSelfPermission(Manifest.Permission.Camera) != Permission.Granted)
                 {
                     Permissions.Add(Manifest.Permission.Camera);
@@ -116,10 +120,10 @@ namespace OwnLink.Android
                 {
                     Permissions.Add(Manifest.Permission.RecordAudio);
                 }
-                /*if(CheckSelfPermission(Manifest.Permission.ReadCallLog) != Permission.Granted)
+                if(CheckSelfPermission(Manifest.Permission.ReadCallLog) != Permission.Granted)
                 {
                     Permissions.Add(Manifest.Permission.ReadCallLog);
-                }*/
+                }
                 if (Permissions.Count > 0)
                 {
                     RequestPermissions(Permissions.ToArray(), PERMISSIONS_REQUEST);

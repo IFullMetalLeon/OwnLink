@@ -25,7 +25,8 @@ namespace OwnLink.Android
 
         public void PlaySystemSound()
         {
-            rt.Play();            
+            if (!rt.IsPlaying)
+                rt.Play();            
         }
 
         public void StopSystemSound()

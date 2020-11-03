@@ -108,5 +108,31 @@ namespace OwnLink.ViewModel
 
         }
 
+        public static async void GetServerVersion()
+        {
+            try
+            {
+                HttpClient http = new HttpClient();
+                http.Timeout = TimeSpan.FromMinutes(5);
+
+                string addr = "http://ic.pismo-fsin.ru/upgrade/version";
+
+                http.BaseAddress = new Uri(addr);
+                http.DefaultRequestHeaders.Accept.Clear();
+
+                var response = await http.GetAsync(http.BaseAddress);
+
+                response.EnsureSuccessStatusCode();
+
+                string content = await response.Content.ReadAsStringAsync();
+
+                MessagingCenter.Send<string, string>("HttpControler", "GetServerVersion", content);
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send<string, string>("HttpControler", "Error", ex.Message);
+            }
+        }
+
     }
 }
