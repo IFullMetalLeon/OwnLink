@@ -134,5 +134,29 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public static async void FCMTokenSend(string _phone, string _fcmId,string _deviceId)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(mainUrl + "firebase");
+            var values = new Dictionary<string, string>();
+            values.Add("phone", _phone);
+            values.Add("token", _deviceId);
+            values.Add("fcm_id", _fcmId);
+
+            var response = await http.PostAsync(http.BaseAddress, new FormUrlEncodedContent(values));
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                MessagingCenter.Send<string, string>("HttpControler", "FCMTokenSend", content);
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send<string, string>("HttpControler", "Error", ex.Message);
+            }
+        }
+
     }
 }

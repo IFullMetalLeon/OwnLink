@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1009152333765",
+    "firebase_url": "https://ownlinkmain.firebaseio.com",
+    "project_id": "ownlinkmain",
+    "storage_bucket": "ownlinkmain.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009152333765:android:0f9a009eb2bdfd39eeddac",
+        "android_client_info": {
+          "package_name": "OwnLink.fsin.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009152333765-da0u5v5l9udr648vn9ebe99k5g1p6kcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzIeMnIvgzbzt6mlZPXNUkgmgy1FOK-XM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009152333765-da0u5v5l9udr648vn9ebe99k5g1p6kcr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

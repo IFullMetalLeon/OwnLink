@@ -36,6 +36,7 @@ namespace OwnLink.ViewModel
         }
 
         public INotificationManager notificationManager;
+        public IFCMService fCMService;
 
         public string _phone { get; set; }
         public string _pass { get; set; }
@@ -53,6 +54,7 @@ namespace OwnLink.ViewModel
             Reconnect = new Command(reconnect);
 
             notificationManager = DependencyService.Get<INotificationManager>();
+            fCMService = DependencyService.Get<IFCMService>();
 
             Core.Listener.OnRegistrationStateChanged += OnRegistration;
             Core.Listener.OnCallStateChanged += OnCall;
@@ -68,6 +70,7 @@ namespace OwnLink.ViewModel
             });
             HttpControler.GetServerVersion();
             string s = CrossDeviceInfo.Current.DeviceName;
+            string deviceId = CrossDeviceInfo.Current.Id;
             s = CrossDeviceInfo.Current.Model;
             s = CrossDeviceInfo.Current.Platform.ToString();
 
@@ -75,6 +78,10 @@ namespace OwnLink.ViewModel
             _pass = CrossSettings.Current.GetValueOrDefault("sipPhonePass", "");
 
             VersionNumber = CrossDeviceInfo.Current.AppVersion;
+
+            string curFCMToken = fCMService.GetToken();
+
+            HttpControler.FCMTokenSend(Phone, curFCMToken, deviceId);
 
             //Phone = "leon2";
             //_pass = "BYMyt3rL8T9wfBdY";

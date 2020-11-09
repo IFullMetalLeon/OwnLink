@@ -4,7 +4,7 @@ using Plugin.Settings;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
+using OwnLink.ViewModel;
 
 namespace OwnLink
 {
@@ -29,11 +29,9 @@ namespace OwnLink
         {
             InitializeComponent();
 
-
-
             Manager = new LinphoneManager();
             Manager.Init(ConfigFilePath, FactoryFilePath, context);
-            //CrossSettings.Current.AddOrUpdateValue("sipPhoneLogin", "");
+
             string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
             if (_login == "")
             {

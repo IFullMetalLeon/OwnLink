@@ -31,4 +31,9 @@ namespace OwnLink
         void SpeakerphoneOn();
         void SpeakerphoneOff();
     }
+
+    public interface IFCMService
+    {
+        string GetToken();
+    }
 }

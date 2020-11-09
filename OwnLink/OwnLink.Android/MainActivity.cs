@@ -19,6 +19,8 @@ using Plugin.CurrentActivity;
 using Android.Content;
 using Android.Database;
 using Android.Provider;
+using Firebase.Iid;
+using AndroidApp = Android.App.Application;
 
 namespace OwnLink.Android
 {
@@ -28,6 +30,8 @@ namespace OwnLink.Android
         int PERMISSIONS_REQUEST = 101;
         TextureView displayCamera;
         TextureView captureCamera;
+        internal static readonly string CHANNEL_ID = "my_notification_channel";
+        internal static readonly int NOTIFICATION_ID = 100;
 
         public static MainActivity instance { set; get; }
         protected override void OnCreate(Bundle bundle)
@@ -97,9 +101,11 @@ namespace OwnLink.Android
             app.Core.VideoCaptureEnabled = true;
 
             instance = this;
-            
+
+            CreateNotificationChannel();
+
             LoadApplication(app);
-            CreateNotificationFromIntent(Intent);
+            //CreateNotificationFromIntent(Intent);
         }
 
         protected override void OnResume()
@@ -143,6 +149,28 @@ namespace OwnLink.Android
                     i += 1;
                 }
             }
+        }
+
+        void CreateNotificationChannel()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification
+                // channel on older versions of Android.
+                return;
+            }
+
+            var channel = new NotificationChannel(CHANNEL_ID,
+                                                  "FCM Notifications",
+                                                  NotificationImportance.Default)
+            {
+
+                Description = "Firebase Cloud Messages appear in this channel"
+            };
+
+            var notificationManager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
+            notificationManager.CreateNotificationChannel(channel);
         }
 
         protected override void OnNewIntent(Intent intent)

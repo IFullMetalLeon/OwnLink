@@ -98,6 +98,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CallJournal.cs" />
+    <Compile Include="iOSFCMService.cs" />
     <Compile Include="iOSNotificationManager.cs" />
     <Compile Include="iOSPlaySystemService.cs" />
     <Compile Include="iOSSpeakerPhone.cs" />
