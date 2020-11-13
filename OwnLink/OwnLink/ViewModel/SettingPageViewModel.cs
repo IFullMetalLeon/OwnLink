@@ -16,6 +16,7 @@ using Android.Content;
 using System.Windows.Input;
 using Plugin.FilePicker;
 using Plugin.FilePicker.Abstractions;
+using Xamarin.Essentials;
 
 namespace OwnLink.ViewModel
 {
@@ -33,7 +34,7 @@ namespace OwnLink.ViewModel
 
         public SettingPageViewModel()
         {
-            _uri = "https://yandex.ru";
+            _uri = "http://xn--b1akbuscr4eza.xn--p1ai/";
             openUri = new Command(showUri);
             filePick = new Command(fileOpen);
             sendMsg = new Command(sendMessage);
@@ -64,7 +65,7 @@ namespace OwnLink.ViewModel
 
         public void showUri()
         {
-            UserDialogs.Instance.Alert(_uri);
+            Launcher.OpenAsync(_uri);
         }
 
         public async void fileOpen()

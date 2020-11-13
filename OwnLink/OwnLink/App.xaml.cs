@@ -16,7 +16,6 @@ namespace OwnLink
         public int flag;
         public LinphoneManager Manager { get; set; }
         public int flagSleep { get; set; }
-
         public Core Core
         {
             get
@@ -28,7 +27,6 @@ namespace OwnLink
         public App(IntPtr context)
         {
             InitializeComponent();
-
             Manager = new LinphoneManager();
             Manager.Init(ConfigFilePath, FactoryFilePath, context);
 

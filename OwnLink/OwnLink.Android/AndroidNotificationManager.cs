@@ -50,18 +50,18 @@ namespace OwnLink.Android
             PendingIntent pendingIntent = PendingIntent.GetActivity(AndroidApp.Context, pendingIntentId, intent, PendingIntentFlags.OneShot);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(AndroidApp.Context, channelId)
-                .SetContentIntent(pendingIntent)
+                //.SetContentIntent(pendingIntent)
                 .SetContentTitle(title)
                 .SetContentText(message)
-                //.SetVisibility((int)NotificationVisibility.Public)
-                .SetCategory(Notification.CategoryCall)
-                .SetPriority((int)NotificationPriority.High)
+                .SetVisibility((int)NotificationVisibility.Public)
+                .SetFullScreenIntent(pendingIntent,true)
+                .SetPriority((int)NotificationPriority.Max)               
                 .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_large))
                 .SetSmallIcon(Resource.Drawable.notification_tile_bg)
                 .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
-                .SetVisibility(NotificationCompat.VisibilityPublic)
-                .SetAutoCancel(true);
-                //.SetDefaults((int)NotificationDefaults.All);
+                //.SetOngoing(true)
+                .SetAutoCancel(true)
+                .SetDefaults((int)NotificationDefaults.Sound);
 
             var notification = builder.Build();
             manager.Notify(messageId, notification);
@@ -82,14 +82,18 @@ namespace OwnLink.Android
         void CreateNotificationChannel()
         {
             manager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
-
+            
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 var channelNameJava = new Java.Lang.String(channelName);
-                var channel = new NotificationChannel(channelId, channelNameJava, NotificationImportance.Default)
+                var channel = new NotificationChannel(channelId, channelNameJava, NotificationImportance.Max)
                 {
                     Description = channelDescription
                 };
+                channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+                channel.LockscreenVisibility = NotificationVisibility.Public;
+                channel.EnableVibration(true);
+
                 manager.CreateNotificationChannel(channel);
             }
 

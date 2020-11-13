@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\LoginPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\MasterDetailMainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\SettingPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TestPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\CallPage.xaml.cs">
       <DependentUpon>CallPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -65,9 +66,19 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)View\TestPage.xaml.cs">
+      <DependentUpon>TestPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)View\CallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)View\TestPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

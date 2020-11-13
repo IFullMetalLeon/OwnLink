@@ -170,7 +170,7 @@ namespace OwnLink.ViewModel
             CounrtiesList.Clear();
             foreach (Countries cur in CountryList)
             {
-                if (cur.Name.Contains(CounrtySearchText))
+                if (cur.Name.ToLower().Contains(CounrtySearchText.ToLower()))
                     CounrtiesList.Add(cur);
             }
         }

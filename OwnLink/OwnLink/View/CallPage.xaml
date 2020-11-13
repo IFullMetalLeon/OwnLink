@@ -4,39 +4,100 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="OwnLink.View.CallPage">
+             x:Class="OwnLink.View.CallPage"
+             x:Name="callPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" />
-                <Label x:Name="codecCall" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Codec}" />
-                <Label x:Name="duration" Grid.Row="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}"/>
-                <Grid Grid.Row="3" IsVisible="{Binding IsIncoming}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="acceptCall" Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Green" Command="{Binding AcceptCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
-                    <Button x:Name="declineCall" Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Red" Command="{Binding CancelCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
+        <Grid BackgroundColor="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Frame Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" />
+                    <Label x:Name="duration" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}"/>
                 </Grid>
-                <Grid Grid.Row="3" IsVisible="{Binding IsAccept}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="muteCall" Grid.Column="0" Text="Mute" Command="{Binding MuteCall}" />
-                    <Button x:Name="speakerCall" Grid.Column="1" Text="Громкая" Command="{Binding SpeakerCall}"/>
-                    <Button x:Name="cancelCall" Grid.Column="2" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="20" BackgroundColor="Red" Command="{Binding CancelCall}" HeightRequest="100" WidthRequest="100" CornerRadius="180"/>
-                </Grid>
-            </Grid>
-        </StackLayout>
+            </Frame>
+            <Frame Grid.Row="1" CornerRadius="20" BackgroundColor="White">
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame Grid.Column="0" IsVisible="{Binding IsIncoming}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" BorderColor="Black" BackgroundColor="Gray" CornerRadius="50">
+                            <Frame.GestureRecognizers>
+                                <SwipeGestureRecognizer Direction="Up" Command="{Binding Path=BindingContext.AcceptCall, Source={x:Reference callPage}}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid Margin="2" Padding="5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Green" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    <Label Grid.Row="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Green" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    <Frame Grid.Row="2" CornerRadius="90" BackgroundColor="Green">
+                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" TextColor="White" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+                                </Grid>
+                            </Grid>
+                        </Frame>
+
+                        <Frame Grid.Column="0" IsVisible="{Binding IsAccept}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" CornerRadius="20">
+                            <Grid>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Frame Grid.Row="0" CornerRadius="90" BackgroundColor="{Binding MicButtonColor}" BorderColor="Black">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.MuteCall, Source={x:Reference callPage}}"/>
+                                        </Frame.GestureRecognizers>
+                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" TextColor="{Binding MicLabelTextColor}" Text="&#xEC71;" FontSize="30"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+
+                                    </Frame>
+                                    <Frame Grid.Row="1" CornerRadius="90" BackgroundColor="{Binding SpeakerButtonColor}" BorderColor="Black">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.SpeakerCall, Source={x:Reference callPage}}"/>
+                                        </Frame.GestureRecognizers>
+                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE767;" TextColor="{Binding SpeakerLabelTextColor}" FontSize="30"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+                                </Grid>
+                            </Grid>
+                        </Frame>
+
+                        <Frame Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" BorderColor="Black" BackgroundColor="Gray" CornerRadius="50">
+                            <Frame.GestureRecognizers>
+                                <SwipeGestureRecognizer Direction="Up" Command="{Binding Path=BindingContext.CancelCall, Source={x:Reference callPage}}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid Margin="2" Padding="5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Red" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    <Label Grid.Row="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Red" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    <Frame Grid.Row="2" CornerRadius="90" BackgroundColor="Red">
+                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="30" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+                                </Grid>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+
+                </StackLayout>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

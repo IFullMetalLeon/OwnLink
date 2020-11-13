@@ -202,9 +202,9 @@ namespace OwnLink.ViewModel
             Core.DefaultProxyConfig = proxyConfig;
 
             Core.RefreshRegisters();
-
             
-                
+           // notificationManager.ScheduleNotification("Своя Связь", "тест");
+
         }
 
         private void OnRegistration(Core lc, ProxyConfig config, RegistrationState state, string message)

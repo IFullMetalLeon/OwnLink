@@ -44,7 +44,7 @@ namespace OwnLink.ViewModel
             {
                 DateTime dt = new DateTime();
                 dt = Convert.ToDateTime(HistoryCall.date_time);
-                return dt.ToString("ddd, d MMMM H:mm");
+                return dt.ToString("dd MMM, H:mm ");
             }
             set
             {
@@ -60,17 +60,22 @@ namespace OwnLink.ViewModel
         {
             get
             {
-                string mm = "";
-                string ss = "";
-                if (Convert.ToInt32(HistoryCall.duration) % 60 > 9)
-                    ss += (Convert.ToInt32(HistoryCall.duration) % 60).ToString();
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                {
+                    string mm = "";
+                    string ss = "";
+                    if (Convert.ToInt32(HistoryCall.duration) % 60 > 9)
+                        ss += (Convert.ToInt32(HistoryCall.duration) % 60).ToString();
+                    else
+                        ss += "0" + (Convert.ToInt32(HistoryCall.duration) % 60).ToString();
+                    if (Convert.ToInt32(HistoryCall.duration) / 60 > 9)
+                        mm += (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
+                    else
+                        mm += "0" + (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
+                    return " | " + mm + ":" + ss;
+                }
                 else
-                    ss += "0" + (Convert.ToInt32(HistoryCall.duration) % 60).ToString();
-                if (Convert.ToInt32(HistoryCall.duration) / 60 > 9)
-                    mm += (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
-                else
-                    mm += "0" + (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
-                return mm + ":" + ss;
+                    return "";
             }
             set
             {
@@ -102,7 +107,10 @@ namespace OwnLink.ViewModel
         {
             get
             {
-                return HistoryCall.type;
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                    return "Входящий";
+                else
+                    return "Пропущенный";               
             }
             set
             {
@@ -111,6 +119,28 @@ namespace OwnLink.ViewModel
                     HistoryCall.type = value;
                     OnPropertyChanged("CallStatus");
                 }
+            }
+        }
+
+        public string CallerTextColor
+        {
+            get
+            {
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                    return "Black";
+                else
+                    return "Red";
+            }
+        }
+
+        public string IconColor
+        {
+            get
+            {
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                    return "Green";
+                else
+                    return "Red";
             }
         }
     }

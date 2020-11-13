@@ -7,24 +7,40 @@
              Title="История звонков"
              x:Class="OwnLink.View.HistoryCallPage">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout BackgroundColor="White">
             <ListView ItemsSource="{Binding historyCalls}"
                       HasUnevenRows="True"
                       SeparatorVisibility="Default">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid>
+                            <Grid Padding="0" Margin="30,0,1,0" BackgroundColor="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Text="{Binding Caller}"/>
-                                <Label Grid.Column="1" Text="{Binding CallStatus}"/>
-                                <Label Grid.Column="2" Text="{Binding DateShow}"/>
+                                <Label FontSize="16" Grid.Row="0" Grid.Column="0">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Caller}" TextColor="{Binding CallerTextColor}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" TextColor="{Binding IconColor}" FontSize="30"
+                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                <Label FontSize="16" Grid.Row="1" Grid.Column="0" TextColor="Gray">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding DateShow}"/>
+                                            <Span Text="{Binding Duration}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
                             </Grid>
-                            
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

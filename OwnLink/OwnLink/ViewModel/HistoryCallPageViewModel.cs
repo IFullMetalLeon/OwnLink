@@ -52,19 +52,23 @@ namespace OwnLink.ViewModel
             historyCalls.Clear();
             if (content.Length > 2)
             {
+                List<HistoryCallView> q = new List<HistoryCallView>();
                 historyRootObject tmp = JsonConvert.DeserializeObject<historyRootObject>(content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
                 foreach (historyJsonItem cur in tmp.history)
                 {
-                    historyCalls.Add(new HistoryCallView
+                    q.Add(new HistoryCallView
                     {
                         Id = cur.id,
-                        Duration = cur.duration,
+                        Duration = cur.billsec,
                         DateShow = cur.start,
                         Caller = cur.src,
                         CallStatus = cur.disposition
                     });
                 }
+                q.Reverse();
+                foreach (HistoryCallView cur in q)
+                    historyCalls.Add(cur);
             }
         }
 

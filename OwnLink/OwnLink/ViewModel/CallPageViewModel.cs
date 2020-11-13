@@ -21,12 +21,12 @@ namespace OwnLink.ViewModel
         }
 
         public string _name { get; set; }
-        public string _codec { get; set; }
         public int _duration { get; set; }
         public bool _isAccept { get; set; }
         public bool _isIncoming { get; set; }
 
-        public bool isSpeakerPhoneOn;
+        public bool _isSpeakerPhoneOn { get; set; }
+        public bool _isMicOn { get; set; }
 
         public ICommand AcceptCall { get; set; }
         public ICommand CancelCall { get; set; }
@@ -56,7 +56,7 @@ namespace OwnLink.ViewModel
         {
             curCall = Core.CurrentCall;
 
-
+            Name = "";
 
             if (curCall != null)
             {
@@ -68,9 +68,8 @@ namespace OwnLink.ViewModel
             Duration = 0;
             IsAccept = false;
             IsIncoming = true;
-            isSpeakerPhoneOn = false;
-
-            Codec = "Неизвестный кодек";
+            IsSpeakerPhoneOn = false;
+            IsMicOn = true;
 
             playSoundService.InitSystemSound();
             playSoundService.PlaySystemSound();
@@ -84,7 +83,6 @@ namespace OwnLink.ViewModel
 
         public void accCall()
         {
-
             if (curCall != null)
             {
                 playSoundService.StopSystemSound();
@@ -95,8 +93,6 @@ namespace OwnLink.ViewModel
                 try
                 {
                     PayloadType cur = curCall.Params.UsedAudioPayloadType;
-                    //curCall.Params.
-                    Codec = cur.MimeType;
                 }
                 catch(Exception ex) { }
             }
@@ -116,21 +112,24 @@ namespace OwnLink.ViewModel
             if (curCall != null)
             {
                 curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
+                IsMicOn = !IsMicOn;
             }
+            IsMicOn = !IsMicOn;
         }
 
         public void speakerCall()
         {
-            if (isSpeakerPhoneOn)
+            if (IsSpeakerPhoneOn)
             {
-                isSpeakerPhoneOn = false;
+                IsSpeakerPhoneOn = false;
                 speakerPhone.SpeakerphoneOff();
             }
             else
             {
-                isSpeakerPhoneOn = true;
+                IsSpeakerPhoneOn = true;
                 speakerPhone.SpeakerphoneOn();
             }
+            IsSpeakerPhoneOn = !IsSpeakerPhoneOn;
         }
 
         private bool OnTimerTick()
@@ -173,21 +172,7 @@ namespace OwnLink.ViewModel
             }
         }
 
-        public string Codec
-        {
-            get
-            {
-                return _codec;
-            }
-            set
-            {
-                if (_codec != value)
-                {
-                    _codec = value;
-                    OnPropertyChanged("Codec");
-                }
-            }
-        }
+
 
         public int Duration
         {
@@ -255,5 +240,100 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public bool IsMicOn
+        {
+            get
+            {
+                return _isMicOn;
+            }
+            set
+            {
+                if (_isMicOn != value)
+                {
+                    _isMicOn = value;
+                    OnPropertyChanged("IsMicOn");
+                    OnPropertyChanged("MicButtonColor");
+                    OnPropertyChanged("MicLabelTextColor");
+                }
+            }
+        }
+
+        public bool IsMicOff
+        {
+            get
+            {
+                return !_isMicOn;
+            }
+        }
+
+        public bool IsSpeakerPhoneOn
+        {
+            get
+            {
+                return _isSpeakerPhoneOn;
+            }
+            set
+            {
+                if (_isSpeakerPhoneOn != value)
+                {
+                    _isSpeakerPhoneOn = value;
+                    OnPropertyChanged("IsSpeakerPhoneOn");
+                    OnPropertyChanged("SpeakerButtonColor");
+                    OnPropertyChanged("SpeakerLabelTextColor");
+                }
+            }
+        }
+
+        public bool IsSpeakerPhoneOff
+        {
+            get
+            {
+                return !_isSpeakerPhoneOn;
+            }
+        }
+
+        public string MicButtonColor
+        {
+            get
+            {
+                if (IsMicOn)
+                    return "White";
+                else
+                    return "Gray";
+            }
+        }
+
+        public string MicLabelTextColor
+        {
+            get
+            {
+                if (IsMicOn)
+                    return "Black";
+                else
+                    return "White";
+            }
+        }
+
+        public string SpeakerButtonColor
+        {
+            get
+            {
+                if (IsSpeakerPhoneOn)
+                    return "White";
+                else
+                    return "Gray";
+            }
+        }
+
+        public string SpeakerLabelTextColor
+        {
+            get
+            {
+                if (IsSpeakerPhoneOn)
+                    return "Black";
+                else
+                    return "White";
+            }
+        }
     }
 }
