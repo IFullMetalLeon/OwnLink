@@ -2,8 +2,8 @@
 <resources>
 
   <style name="MainTheme" parent="MainTheme.Base">
-    <item name="colorPrimary">#2196F3</item>
-    <item name="colorPrimaryDark">#1976D2</item>
+    <item name="colorPrimary">#3399ff</item>
+    <item name="colorPrimaryDark">#3399ff</item>
 
     <item name="android:windowBackground">@drawable/splash_screen</item>
   </style>

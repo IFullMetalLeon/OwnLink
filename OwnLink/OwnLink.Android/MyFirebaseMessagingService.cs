@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Media;
+using Android.OS;
 using Android.Support.V4.App;
+using OwnLink;
+using OwnLink.Android;
+using System;
+using Xamarin.Forms;
 using Firebase.Messaging;
+using AndroidApp = Android.App.Application;
+using System.Collections.Generic;
 
 namespace OwnLink.Android
 {
@@ -36,11 +42,11 @@ namespace OwnLink.Android
             {
                 System.Diagnostics.Debug.WriteLine(TAG, "Notification Message Body: " + message.GetNotification().Body);
                 var body = message.GetNotification().Body;
-                SendNotification(body, message.Data);
+                ScheduleNotification(body, message.Data);
             }
             else
             {
-                SendNotification("123", message.Data);
+                ScheduleNotification("123", message.Data);
             }
         }
         // [END receive_message]
@@ -48,8 +54,9 @@ namespace OwnLink.Android
         /**
          * Create and show a simple notification containing the received FCM message.
          */
-        void SendNotification(string messageBody, IDictionary<string, string> data)
+       /* void SendNotification(string messageBody, IDictionary<string, string> data)
         {
+            
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
             foreach (var key in data.Keys)
@@ -69,6 +76,20 @@ namespace OwnLink.Android
                                                           intent,
                                                           PendingIntentFlags.OneShot);
 
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID)
+                //.SetContentIntent(pendingIntent)
+                .SetContentTitle(title)
+                .SetContentText(body)
+                .SetVisibility((int)NotificationVisibility.Public)
+                .SetFullScreenIntent(pendingIntent, true)
+                .SetPriority((int)NotificationPriority.Max)
+                .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_large))
+                .SetSmallIcon(Resource.Drawable.notification_tile_bg)
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
+                //.SetOngoing(true)
+                .SetAutoCancel(true)
+                .SetDefaults((int)NotificationDefaults.Sound);
+
             var notificationBuilder = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID)
                                       .SetSmallIcon(Resource.Drawable.logo)
                                       .SetContentTitle(title)
@@ -77,7 +98,101 @@ namespace OwnLink.Android
                                       .SetContentIntent(pendingIntent);
 
             var notificationManager = NotificationManagerCompat.From(this);
-            notificationManager.Notify(MainActivity.NOTIFICATION_ID, notificationBuilder.Build());
+            notificationManager.Notify(MainActivity.NOTIFICATION_ID, builder.Build());
+        }*/
+
+
+        const string channelId = "OwnLinkFCM";
+        const string channelName = "OwnLinkFCM";
+        const string channelDescription = "The OwnLinkFCM channel for notifications.";
+        const int pendingIntentId = 0;
+
+        public const string TitleKey = "title";
+        public const string MessageKey = "message";
+
+        bool channelInitialized = false;
+        int messageId = 100;
+        NotificationManager manager;
+
+        public event EventHandler NotificationReceived;
+
+        public void Initialize()
+        {
+            CreateNotificationChannel();
+        }
+
+        public int ScheduleNotification(string messageBody, IDictionary<string, string> data)
+        {
+            if (!channelInitialized)
+            {
+                CreateNotificationChannel();
+            }
+
+            string title = "767";
+            if (data.ContainsKey("type"))
+                title = data["type"];
+            string body = "657";
+            if (data.ContainsKey("caller_name"))
+                body = data["caller_name"];
+
+            messageId++;
+
+            Intent intent = new Intent(AndroidApp.Context, typeof(MainActivity));
+            intent.PutExtra(TitleKey, title);
+            intent.PutExtra(MessageKey, body);
+
+            PendingIntent pendingIntent = PendingIntent.GetActivity(AndroidApp.Context, pendingIntentId, intent, PendingIntentFlags.OneShot);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(AndroidApp.Context, channelId)
+                //.SetContentIntent(pendingIntent)
+                .SetContentTitle(title)
+                .SetContentText(body)
+                .SetVisibility((int)NotificationVisibility.Public)
+                .SetFullScreenIntent(pendingIntent, true)
+                .SetPriority((int)NotificationPriority.Max)
+                .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_large))
+                .SetSmallIcon(Resource.Drawable.notification_tile_bg)
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
+                //.SetOngoing(true)
+                .SetAutoCancel(true)
+                .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
+
+            var notification = builder.Build();
+            manager.Notify(messageId, notification);
+
+            return messageId;
+        }
+
+        public void ReceiveNotification(string title, string message)
+        {
+            var args = new NotificationEventArgs()
+            {
+                Title = title,
+                Message = message,
+            };
+            NotificationReceived?.Invoke(null, args);
+        }
+
+        void CreateNotificationChannel()
+        {
+            manager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                var channelNameJava = new Java.Lang.String(channelName);
+                var channel = new NotificationChannel(channelId, channelNameJava, NotificationImportance.Max)
+                {
+                    Description = channelDescription
+                };
+                channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+                      
+                channel.LockscreenVisibility = NotificationVisibility.Public;                
+                channel.EnableVibration(true);
+
+                manager.CreateNotificationChannel(channel);
+            }
+
+            channelInitialized = true;
         }
     }
 

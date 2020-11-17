@@ -15,12 +15,14 @@ namespace OwnLink.View
     {
         public MasterDetailMainViewModel mdmvm { get; set; }
         public int flag;
+        public int isCallShow;
         public MasterDetailMain()
         {
             InitializeComponent();
             mdmvm = new MasterDetailMainViewModel() {Navigation = this.Navigation };
             this.BindingContext = mdmvm;
             flag = 0;
+            isCallShow = 0;
         }
 
         protected override void OnAppearing()
@@ -34,7 +36,7 @@ namespace OwnLink.View
             });
 
             mdmvm.startPage();
-
+            isCallShow = 0;
             if (flag == 0 )
             {
                 Detail = new NavigationPage(new HistoryCallPage());
@@ -70,11 +72,16 @@ namespace OwnLink.View
         {
             if (content == "Incoming")
             {
-                Detail = new NavigationPage(new CallPage());
-                IsPresented = false;
+                if (isCallShow == 0)
+                {
+                    isCallShow = 1;
+                    Detail = new NavigationPage(new CallPage());
+                    IsPresented = false;
+                }
             }
             if (content == "End")
             {
+                isCallShow = 0;
                 Detail = new NavigationPage(new HistoryCallPage());
                 IsPresented = false;
             }

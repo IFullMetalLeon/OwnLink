@@ -6,7 +6,7 @@
   <item android:drawable="@color/splash_screen" />
 
   <item>
-    <bitmap android:src="@drawable/logo"
+    <bitmap android:src="@drawable/icon192"
             android:tileMode="disabled"
             android:gravity="center" />
   </item>

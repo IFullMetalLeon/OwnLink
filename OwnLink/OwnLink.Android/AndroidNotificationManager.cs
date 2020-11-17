@@ -15,9 +15,9 @@ namespace OwnLink.Android
 {
     public class AndroidNotificationManager : INotificationManager
     {
-        const string channelId = "default";
-        const string channelName = "Default";
-        const string channelDescription = "The default channel for notifications.";
+        const string channelId = "OwnLinkBG";
+        const string channelName = "OwnLinkBG";
+        const string channelDescription = "The OwnLinkBG channel for notifications.";
         const int pendingIntentId = 0;
 
         public const string TitleKey = "title";
@@ -58,10 +58,10 @@ namespace OwnLink.Android
                 .SetPriority((int)NotificationPriority.Max)               
                 .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_large))
                 .SetSmallIcon(Resource.Drawable.notification_tile_bg)
-                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
+                //.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
                 //.SetOngoing(true)
                 .SetAutoCancel(true)
-                .SetDefaults((int)NotificationDefaults.Sound);
+                .SetDefaults((int)NotificationDefaults.Vibrate);
 
             var notification = builder.Build();
             manager.Notify(messageId, notification);
@@ -90,7 +90,8 @@ namespace OwnLink.Android
                 {
                     Description = channelDescription
                 };
-                channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+                //channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+                channel.SetSound(null, null);
                 channel.LockscreenVisibility = NotificationVisibility.Public;
                 channel.EnableVibration(true);
 

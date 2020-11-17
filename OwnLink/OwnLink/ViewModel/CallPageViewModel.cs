@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Linphone;
+using Plugin.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -71,8 +72,9 @@ namespace OwnLink.ViewModel
             IsSpeakerPhoneOn = false;
             IsMicOn = true;
 
-            playSoundService.InitSystemSound();
-            playSoundService.PlaySystemSound();
+           // playSoundService.InitSystemSound();
+           // playSoundService.PlaySystemSound();
+
         }
 
 
@@ -85,16 +87,11 @@ namespace OwnLink.ViewModel
         {
             if (curCall != null)
             {
-                playSoundService.StopSystemSound();
+               // playSoundService.StopSystemSound();
                 curCall.Accept();
 
                 IsAccept = true;
                 IsIncoming = false;
-                try
-                {
-                    PayloadType cur = curCall.Params.UsedAudioPayloadType;
-                }
-                catch(Exception ex) { }
             }
             else
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
@@ -103,7 +100,7 @@ namespace OwnLink.ViewModel
         public void cancelCall()
         {
             Core.TerminateAllCalls();
-            playSoundService.StopSystemSound();
+           // playSoundService.StopSystemSound();
             MessagingCenter.Send<string, string>("Call", "CallState", "End");
         }
 
@@ -114,7 +111,6 @@ namespace OwnLink.ViewModel
                 curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
                 IsMicOn = !IsMicOn;
             }
-            IsMicOn = !IsMicOn;
         }
 
         public void speakerCall()
@@ -129,7 +125,6 @@ namespace OwnLink.ViewModel
                 IsSpeakerPhoneOn = true;
                 speakerPhone.SpeakerphoneOn();
             }
-            IsSpeakerPhoneOn = !IsSpeakerPhoneOn;
         }
 
         private bool OnTimerTick()
@@ -142,7 +137,7 @@ namespace OwnLink.ViewModel
             }
             else
             {
-                playSoundService.StopSystemSound();
+                //playSoundService.StopSystemSound();
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
                 return false;
             }

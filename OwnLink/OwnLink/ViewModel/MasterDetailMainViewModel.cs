@@ -47,6 +47,8 @@ namespace OwnLink.ViewModel
         public Command ChangePhone { get; set; }
         public Command Reconnect { get; set; }
 
+        public int isNotifySend;
+
 
         public MasterDetailMainViewModel()
         {
@@ -60,7 +62,7 @@ namespace OwnLink.ViewModel
             Core.Listener.OnCallStateChanged += OnCall;
             Core.Listener.OnLogCollectionUploadStateChanged += OnLogCollectionUpload;
 
-            
+            isNotifySend = 0;
         }
 
         public void startPage()
@@ -87,12 +89,12 @@ namespace OwnLink.ViewModel
             //_pass = "BYMyt3rL8T9wfBdY";
 
 
-            RegStatus = "Требуется регистрация";
+            RegStatus = "Не в сети";
             RegTextColor = "Red";
             if (Core.DefaultProxyConfig?.State == RegistrationState.Ok)
             {
                 Core.EnsureRegistered();
-                RegStatus = "Регистрация завершена";
+                RegStatus = "Активен";
                 RegTextColor = "Green";
             }
             else
@@ -135,8 +137,18 @@ namespace OwnLink.ViewModel
                  a++;
              }
 
+            Core.Ring = null;
+            Core.Ringback = null;
+            Core.RingerDevice = null;
+            Core.RemoteRingbackTone = null;
+            Core.RingDuringIncomingEarlyMedia = false;
+            Core.PushNotificationEnabled = false;
+
             if (Core.CallsNb > 0)
+            {
+                isNotifySend = 0;
                 MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
+            }
         }
 
 
@@ -176,7 +188,7 @@ namespace OwnLink.ViewModel
         {
             Core.ClearAllAuthInfo();
             Core.ClearProxyConfig();
-            RegStatus = "Требуется регистрация";
+            RegStatus = "Не в сети";
             RegTextColor = "Red";
 
             var authInfo = Factory.Instance.CreateAuthInfo(Phone, null, _pass, null, null, "ic.pismo-fsin.ru");
@@ -211,13 +223,13 @@ namespace OwnLink.ViewModel
         {
             if (state == RegistrationState.Ok)
             {
-                RegStatus = "Регистрация завершена";
+                RegStatus = "Активен";
                 RegTextColor = "Green";
             }
             if (state == RegistrationState.Progress)
             {
-                RegStatus = "Происходит регистрация";
-                RegTextColor = "Yellow";
+                RegStatus = "Подключение";
+                RegTextColor = "Orange";
             }
         }
 
@@ -226,6 +238,7 @@ namespace OwnLink.ViewModel
         {
             try
             {
+               // Core.StopRinging();
                 if (Core.CallsNb > 0)
                 {
 
@@ -235,9 +248,12 @@ namespace OwnLink.ViewModel
                             MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
                         else
                         {
-                            string userName = Core.CurrentCall.RemoteAddress.Username;
-                            notificationManager.ScheduleNotification("Своя Связь","Входящий звонок " + userName);
-                            MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
+                            if (isNotifySend == 0)
+                            {
+                                string userName = Core.CurrentCall.RemoteAddress.Username;
+                                notificationManager.ScheduleNotification("Своя Связь", "Входящий звонок " + userName);
+                                isNotifySend = 1;
+                            }
                         }
                     }
                     else if (Core.CurrentCall.State == CallState.StreamsRunning)
@@ -255,7 +271,7 @@ namespace OwnLink.ViewModel
 
         private void OnLogCollectionUpload(Core lc, CoreLogCollectionUploadState state, string info)
         {
-            UserDialogs.Instance.Alert("info");
+            //UserDialogs.Instance.Alert("info");
         }
 
 

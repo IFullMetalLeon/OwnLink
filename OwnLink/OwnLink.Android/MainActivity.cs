@@ -21,6 +21,7 @@ using Android.Database;
 using Android.Provider;
 using Firebase.Iid;
 using AndroidApp = Android.App.Application;
+using Android.Media;
 
 namespace OwnLink.Android
 {
@@ -102,7 +103,7 @@ namespace OwnLink.Android
 
             instance = this;
 
-            CreateNotificationChannel();
+            //CreateNotificationChannel();
 
             LoadApplication(app);
             //CreateNotificationFromIntent(Intent);
@@ -161,13 +162,13 @@ namespace OwnLink.Android
                 return;
             }
 
-            var channel = new NotificationChannel(CHANNEL_ID,
-                                                  "FCM Notifications",
-                                                  NotificationImportance.Default)
+            var channel = new NotificationChannel(CHANNEL_ID, "Default", NotificationImportance.Max)
             {
-
-                Description = "Firebase Cloud Messages appear in this channel"
+                Description = "The default channel for notifications."
             };
+            channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+            channel.LockscreenVisibility = NotificationVisibility.Public;
+            channel.EnableVibration(true);
 
             var notificationManager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
             notificationManager.CreateNotificationChannel(channel);

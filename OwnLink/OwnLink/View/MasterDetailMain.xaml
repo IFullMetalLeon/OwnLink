@@ -13,9 +13,9 @@
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <Frame Grid.Row="0" Margin="3" CornerRadius="5" BackgroundColor="#44c913">
+                    <Frame Grid.Row="0" Margin="0" BackgroundColor="#3399ff">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
@@ -32,7 +32,7 @@
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
-                            <Frame Grid.Row="1" Margin="0,3,0,3" BackgroundColor="White">
+                            <Frame Grid.Row="1" Margin="0,3,0,3" BackgroundColor="White" CornerRadius="15">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ChangePhone}"/>
                                 </Frame.GestureRecognizers>
@@ -45,7 +45,7 @@
                                     <Label Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE70F;" FontSize="16" TextColor="Black" />
                                 </Grid>
                             </Frame>
-                            <Frame Grid.Row="2" Margin="0,3,0,3" BackgroundColor="White">
+                            <Frame Grid.Row="2" Margin="0,3,0,3" BackgroundColor="White" CornerRadius="15">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Reconnect}"/>
                                 </Frame.GestureRecognizers>
