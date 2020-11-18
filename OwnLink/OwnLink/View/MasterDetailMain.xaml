@@ -83,8 +83,8 @@
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="8*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE713;" FontSize="20" />
-                                <Label Grid.Column="1" Text="Настройки" FontSize="16" />
+                            <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE82F;" FontSize="20" />
+                                <Label Grid.Column="1" Text="Тех. поддержка" FontSize="16" />
                             </Grid>
                         </Frame>
                 </Grid>

@@ -13,6 +13,7 @@ using static OwnLink.Model.JsonClass;
 using Plugin.DeviceInfo;
 using Android.Telephony;
 using Android.Content;
+using System.Windows.Input;
 
 namespace OwnLink.ViewModel
 {
@@ -44,9 +45,9 @@ namespace OwnLink.ViewModel
 
         public ICallJournal callJournal;
         public INavigation Navigation { get; set; }
-        public Command ICallSend { get; set; }
-        public Command SendCode { get; set; }
-        public Command CountryTap { get; set; }
+        public ICommand ICallSend { get; set; }
+        public ICommand SendCode { get; set; }
+        public ICommand CountryTap { get; set; }
 
         public LoginPageViewModel()
         {

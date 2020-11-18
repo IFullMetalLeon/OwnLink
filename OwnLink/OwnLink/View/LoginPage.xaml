@@ -70,8 +70,17 @@
                 </Grid>
             </Frame>
             <Frame BackgroundColor="White" Margin="20,0,20,5" IsVisible="{Binding IsCodeSmsVisible}" CornerRadius="20">
-                <Entry x:Name="codeSmsEntry" Placeholder="Код" Text="{Binding CodeSms}"  Keyboard="Numeric" TextChanged="codeSmsEntry_TextChanged" Margin="0"/>
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Entry x:Name="codeSmsEntry" Grid.Row="0" Placeholder="Код" Text="{Binding CodeSms}"  Keyboard="Numeric" TextChanged="codeSmsEntry_TextChanged" Margin="0"/>
+                    <Button x:Name="sendCode" Grid.Row="1" Text="Отправить код" Command="{Binding SendCode}" Margin="0"/>
+                </Grid>
+                
             </Frame>
+            
         </StackLayout>
      
     </ContentPage.Content>
