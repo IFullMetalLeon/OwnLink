@@ -38,6 +38,10 @@ namespace OwnLink.ViewModel
             openUri = new Command(showUri);
             filePick = new Command(fileOpen);
             sendMsg = new Command(sendMessage);
+            FilePicker = "Выбор файла";
+            UserEmail = "";
+            UserMessage = "";
+            fileName = "";
         }
 
         public void startPage()
@@ -50,10 +54,7 @@ namespace OwnLink.ViewModel
             {
                 showError(arg.Trim());
             });
-            FilePicker = "Выбор файла";
-            UserEmail = "";
-            UserMessage = "";
-            fileName = "";
+            
         }
 
 
@@ -81,8 +82,13 @@ namespace OwnLink.ViewModel
 
         public void sendMessage()
         {
-            string deviceId = CrossDeviceInfo.Current.Id;
-            HttpControler.feedbackSend(UserEmail, UserMessage, deviceId, fileName);          
+            if (UserEmail.Length > 0 && UserMessage.Length > 0)
+            {
+                string deviceId = CrossDeviceInfo.Current.Id;
+                HttpControler.feedbackSend(UserEmail, UserMessage, deviceId, fileName);
+            }
+            else
+                UserDialogs.Instance.Alert("Требуется заполнить поля Почта и Сообщение");
         }
 
         public void feedbackResult(string content)
