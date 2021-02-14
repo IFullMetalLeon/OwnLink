@@ -13,6 +13,7 @@
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
                     <Frame Grid.Row="0" Margin="0" BackgroundColor="#3399ff">
@@ -62,6 +63,19 @@
                     </Frame>
                     <Frame Grid.Row="1">
                         <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="activeCall_Clicked"/>
+                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="8*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" TextColor="Green" FontSize="20" />
+                            <Label Grid.Column="1" Text="Текущий звонок" FontSize="16" />
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="2">
+                        <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="historyCall_Clicked"/>
                         </Frame.GestureRecognizers>
                         <Grid>
@@ -72,21 +86,21 @@
                             <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE780;" FontSize="20" />
                             <Label Grid.Column="1" Text="История звонков" FontSize="16" />
                         </Grid>
-                        </Frame>
+                    </Frame>
 
-                        <Frame Grid.Row="2">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="setting_Clicked"/>
-                            </Frame.GestureRecognizers>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
+                    <Frame Grid.Row="3">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="setting_Clicked"/>
+                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="8*"/>
+                            </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE82F;" FontSize="20" />
-                                <Label Grid.Column="1" Text="Тех. поддержка" FontSize="16" />
-                            </Grid>
-                        </Frame>
+                            <Label Grid.Column="1" Text="Тех. поддержка" FontSize="16" />
+                        </Grid>
+                    </Frame>
                 </Grid>
             </StackLayout>
         </ContentPage>

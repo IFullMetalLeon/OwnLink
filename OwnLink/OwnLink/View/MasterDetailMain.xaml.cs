@@ -7,6 +7,7 @@ using OwnLink.ViewModel;
 using OwnLink.View;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace OwnLink.View
 {
@@ -56,6 +57,15 @@ namespace OwnLink.View
             MessagingCenter.Unsubscribe<string, string>("Call", "CallState");
         }
 
+        private void activeCall_Clicked(object sender, EventArgs e)
+        {           
+            if (mdmvm.Core.CallsNb > 0)
+            {
+                Detail = new NavigationPage(new CallPage());
+                IsPresented = false;
+            }
+        }
+
         private void historyCall_Clicked(object sender, EventArgs e)
         {
             Detail = new NavigationPage(new HistoryCallPage());
@@ -81,6 +91,7 @@ namespace OwnLink.View
             }
             if (content == "End")
             {
+                mdmvm.Core.TerminateAllCalls();
                 isCallShow = 0;
                 Detail = new NavigationPage(new HistoryCallPage());
                 IsPresented = false;

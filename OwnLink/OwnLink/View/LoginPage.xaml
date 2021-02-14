@@ -7,22 +7,21 @@
              Title="Вход в систему"
              x:Class="OwnLink.View.LoginPage">
     <ContentPage.Content>
-        <StackLayout Background="White" Padding="1">
-            <Frame BackgroundColor="White" Padding="1" Margin="20,5,20,5" CornerRadius="20">
+        <StackLayout Background="White">
+            <Frame BackgroundColor="White" Margin="10,5,10,5" BorderColor="White" HasShadow="False">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CountryTap}"/>
+                </Frame.GestureRecognizers>
                 <StackLayout>
-                    <Frame HeightRequest="35">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding CountryTap}"/>
-                        </Frame.GestureRecognizers>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label x:Name="countryName" Grid.Column="0" Text="{Binding CountryName}" FontSize="16" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
-                            <Label Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" FontSize="16" Text="&#xE70D;" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
-                        </Grid>
-                    </Frame>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                             <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="countryName" Grid.Column="0" Text="{Binding CountryName}" FontSize="16" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="Black"/>
+                        <Label Grid.Column="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" FontSize="16" Text="&#xE70D;" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
+                    </Grid>
+                    <BoxView HeightRequest="1" BackgroundColor="#D6DFE5"/>
                     <Grid IsVisible="{Binding CounrtyListVisible}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -30,11 +29,11 @@
                         </Grid.RowDefinitions>
                         <SearchBar x:Name="counrtySearchBar" Grid.Row="0" FontSize="16" Text="{Binding CounrtySearchText}" TextChanged="counrtySearchBar_TextChanged" 
                                                 VerticalTextAlignment="Center" VerticalOptions="Start"/>
-                            <ListView x:Name="counrtyList"
+                        <ListView x:Name="counrtyList"
                                     ItemsSource="{Binding CounrtiesList}"
                                     HasUnevenRows="True"       
                                     SeparatorVisibility="None" 
-                                    SelectedItem="{Binding CounrtySelected}"
+                                    SelectedItem="{Binding CounrtySelected, Mode=TwoWay}"
                                     ItemTapped="countryList_ItemTapped"
                                     Margin="10,1,10,1"
                                     Grid.Row="1">
@@ -58,28 +57,25 @@
                     </Grid>
                 </StackLayout>
             </Frame>
+            
+            <Frame BackgroundColor="White" Margin="10,15,10,15" BorderColor="White" HasShadow="False" IsVisible="{Binding IsNumberVisible}" Padding="0" > 
+                <StackLayout>
+                    <Entry x:Name="phoneEntry" Placeholder="Номер телефона" Keyboard="Telephone" Text="{Binding Phone}" TextChanged="phoneEntry_TextChanged"/>
+                    <Label x:Name="sendResult" Text="{Binding ResultText}" IsVisible="{Binding IsResultTextVisible}" TextColor="{Binding ResultTextColor}" FontSize="14"/>
+                    <Frame BackgroundColor="White" Margin="0,15,0,15" IsVisible="{Binding IsCodeSmsVisible}" HasShadow="False" Padding="0">
+                        <StackLayout>
+                            <Entry x:Name="codeSmsEntry"  Placeholder="Код" Text="{Binding CodeSms}"  Keyboard="Numeric" TextChanged="codeSmsEntry_TextChanged"/>
+                            <Button x:Name="sendCode"  Text="ОК" Command="{Binding SendCode}" BackgroundColor="#658FCE" CornerRadius="12" TextColor="White"/>
+                        </StackLayout>
+                       
+                    </Frame>
 
-            <Frame BackgroundColor="White" Margin="20,0,20,5" IsVisible="{Binding IsNumberVisible}" CornerRadius="20">
-                <Grid Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Entry x:Name="phoneEntry" Grid.Row="0" Placeholder="Номер телефона" Keyboard="Telephone" Text="{Binding Phone}" TextChanged="phoneEntry_TextChanged" Margin="0"/>
-                    <Button x:Name="sendICall" Grid.Row="1" Text="{Binding ICallText}" IsEnabled="{Binding ICallEnb}" Command="{Binding ICallSend}" Margin="0"/>
-                </Grid>
+                    <Button x:Name="sendICall" Text="{Binding ICallText}" IsEnabled="{Binding ICallEnb}" Command="{Binding ICallSend}" Margin="0" BackgroundColor="{Binding ICallBG}" TextColor="{Binding ICallTC}" CornerRadius="12"/>
+
+
+                </StackLayout>
             </Frame>
-            <Frame BackgroundColor="White" Margin="20,0,20,5" IsVisible="{Binding IsCodeSmsVisible}" CornerRadius="20">
-                <Grid Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Entry x:Name="codeSmsEntry" Grid.Row="0" Placeholder="Код" Text="{Binding CodeSms}"  Keyboard="Numeric" TextChanged="codeSmsEntry_TextChanged" Margin="0"/>
-                    <Button x:Name="sendCode" Grid.Row="1" Text="Отправить код" Command="{Binding SendCode}" Margin="0"/>
-                </Grid>
-                
-            </Frame>
+            
             
         </StackLayout>
      

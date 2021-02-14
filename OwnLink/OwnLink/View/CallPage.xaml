@@ -9,8 +9,9 @@
     <ContentPage.Content>
         <Grid BackgroundColor="White">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*"/>
+                
             </Grid.RowDefinitions>
             <Frame Grid.Row="0">
                 <Grid>
@@ -98,6 +99,7 @@
 
                 </StackLayout>
             </Frame>
+            <!--<Button Grid.Row="2" x:Name="resumeButton" Text="Возобновить" IsVisible="{Binding IsPaused}" Command="{Binding ResumeCall}"/>!-->
         </Grid>
     </ContentPage.Content>
 </ContentPage>

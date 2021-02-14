@@ -26,6 +26,10 @@ namespace OwnLink.ViewModel
         public ICommand openUri { get; set; }
         public ICommand filePick { get; set; }
         public ICommand sendMsg { get; set; }
+        public ICommand goToSettings { get; set; }
+        public ICommand goDownLoad { get; set; }
+        public IOpenSettings openSettings { get; set; }
+
 
         public string fileName;
         public string _userEmail { get; set; }
@@ -38,6 +42,10 @@ namespace OwnLink.ViewModel
             openUri = new Command(showUri);
             filePick = new Command(fileOpen);
             sendMsg = new Command(sendMessage);
+            goToSettings = new Command(settings);
+            goDownLoad = new Command(downloads);
+            openSettings = DependencyService.Get<IOpenSettings>();
+
             FilePicker = "Выбор файла";
             UserEmail = "";
             UserMessage = "";
@@ -104,6 +112,16 @@ namespace OwnLink.ViewModel
                 else
                     UserDialogs.Instance.Alert(tmp.message, "Ошибка");
             } 
+        }
+
+        public void settings()
+        {
+            openSettings.GoToSettings();
+        }
+
+        public void downloads()
+        {
+            Launcher.OpenAsync("https://ic.pismo-fsin.ru/upgrade/OwnLink.fsin.apk");
         }
 
         public void showError(string error)

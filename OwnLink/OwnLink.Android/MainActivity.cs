@@ -31,7 +31,10 @@ namespace OwnLink.Android
         int PERMISSIONS_REQUEST = 101;
         TextureView displayCamera;
         TextureView captureCamera;
-        internal static readonly string CHANNEL_ID = "my_notification_channel";
+        const string channelId = "OwnLinkBG";
+        const string channelName = "OwnLinkBG";
+        const string channelDescription = "The OwnLinkBG channel for notifications.";
+        internal static readonly string CHANNEL_ID = "my_nмotification_channel";
         internal static readonly int NOTIFICATION_ID = 100;
 
         public static MainActivity instance { set; get; }
@@ -103,7 +106,7 @@ namespace OwnLink.Android
 
             instance = this;
 
-            //CreateNotificationChannel();
+            CreateNotificationChannel();
 
             LoadApplication(app);
             //CreateNotificationFromIntent(Intent);
@@ -115,10 +118,6 @@ namespace OwnLink.Android
             if (Int32.Parse(Build.VERSION.Sdk) >= 23)
             {
                 List<string> Permissions = new List<string>();
-                /*if (CheckSelfPermission(Manifest.Permission.AccessNotificationPolicy) != Permission.Granted)
-                {
-                    Permissions.Add(Manifest.Permission.AccessNotificationPolicy);
-                }*/
                 if (CheckSelfPermission(Manifest.Permission.Camera) != Permission.Granted)
                 {
                     Permissions.Add(Manifest.Permission.Camera);
@@ -154,24 +153,23 @@ namespace OwnLink.Android
 
         void CreateNotificationChannel()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            NotificationManager manager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                return;
+                var channelNameJava = new Java.Lang.String(channelName);
+                var channel = new NotificationChannel(channelId, channelNameJava, NotificationImportance.Max)
+                {
+                    Description = channelDescription
+                };
+                //channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
+                channel.SetSound(null, null);
+                channel.LockscreenVisibility = NotificationVisibility.Public;
+                channel.EnableVibration(true);
+
+                manager.CreateNotificationChannel(channel);
             }
 
-            var channel = new NotificationChannel(CHANNEL_ID, "Default", NotificationImportance.Max)
-            {
-                Description = "The default channel for notifications."
-            };
-            channel.SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone), null);
-            channel.LockscreenVisibility = NotificationVisibility.Public;
-            channel.EnableVibration(true);
-
-            var notificationManager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
         }
 
         protected override void OnNewIntent(Intent intent)

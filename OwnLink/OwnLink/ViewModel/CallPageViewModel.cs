@@ -1,9 +1,11 @@
 ﻿using Acr.UserDialogs;
 using Linphone;
+using Plugin.DeviceInfo;
 using Plugin.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -24,14 +26,18 @@ namespace OwnLink.ViewModel
         public string _name { get; set; }
         public int _duration { get; set; }
         public bool _isAccept { get; set; }
+        public bool _isPaused { get; set; }
         public bool _isIncoming { get; set; }
 
         public bool _isSpeakerPhoneOn { get; set; }
         public bool _isMicOn { get; set; }
 
+        public bool firstOpen { get; set; }
+
         public ICommand AcceptCall { get; set; }
         public ICommand CancelCall { get; set; }
         public ICommand MuteCall { get; set; }
+        public ICommand ResumeCall { get; set; }
         public ICommand SpeakerCall { get; set; }
         public INavigation Navigation { get; set; }
 
@@ -47,16 +53,18 @@ namespace OwnLink.ViewModel
             CancelCall = new Command(cancelCall);
             MuteCall = new Command(muteCall);
             SpeakerCall = new Command(speakerCall);
+            ResumeCall = new Command(resumeCall);
 
             playSoundService = DependencyService.Get<IPlaySoundService>();
             speakerPhone = DependencyService.Get<ISpeakerPhone>();
-
+            firstOpen = true;
+            
         }
 
         public void startPage()
         {
             curCall = Core.CurrentCall;
-
+            
             Name = "";
 
             if (curCall != null)
@@ -64,13 +72,27 @@ namespace OwnLink.ViewModel
                 Name = curCall.RemoteAddress.DisplayName;
             }
             else
+            {
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login,deviceInfo,deviceId,"Current call dont exist. CallPage. StartPage");
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
-            Device.StartTimer(TimeSpan.FromSeconds(1), OnTimerTick);
-            Duration = 0;
-            IsAccept = false;
-            IsIncoming = true;
-            IsSpeakerPhoneOn = false;
-            IsMicOn = true;
+            }
+
+            if (!IsAccept)
+                Device.StartTimer(TimeSpan.FromSeconds(1), OnTimerTick);
+            
+            if (firstOpen)
+            {
+                Duration = 0;
+                IsAccept = false;
+                IsIncoming = true;
+                IsSpeakerPhoneOn = false;
+                IsMicOn = true;
+                firstOpen = false;
+                IsPaused = false;
+            }
 
            // playSoundService.InitSystemSound();
            // playSoundService.PlaySystemSound();
@@ -85,31 +107,63 @@ namespace OwnLink.ViewModel
 
         public void accCall()
         {
-            if (curCall != null)
+            try
             {
-               // playSoundService.StopSystemSound();
-                curCall.Accept();
+                if (curCall != null)
+                {
+                    // playSoundService.StopSystemSound();
+                    curCall.Accept();
 
-                IsAccept = true;
-                IsIncoming = false;
+                    IsAccept = true;
+                    IsIncoming = false;
+                }
+                else
+                    MessagingCenter.Send<string, string>("Call", "CallState", "End");
             }
-            else
+            catch(Exception ex)
+            {
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Current call dont exist. CallPage. accCall "+ex.Message);
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
+            }
         }
 
         public void cancelCall()
         {
-            Core.TerminateAllCalls();
-           // playSoundService.StopSystemSound();
-            MessagingCenter.Send<string, string>("Call", "CallState", "End");
+            try
+            {
+                Core.TerminateAllCalls();
+                MessagingCenter.Send<string, string>("Call", "CallState", "End");
+            }
+            catch (Exception ex)
+            {
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Current call dont exist. CallPage. cancelCall "+ex.Message);
+                MessagingCenter.Send<string, string>("Call", "CallState", "End");
+            }
         }
 
         public void muteCall()
         {
-            if (curCall != null)
+            try
             {
-                curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
-                IsMicOn = !IsMicOn;
+                if (curCall != null)
+                {
+                    curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
+                    IsMicOn = !IsMicOn;
+                }
+            }
+            catch(Exception ex)
+            {
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Current call dont exist. CallPage. muteCall "+ex.Message);
+                MessagingCenter.Send<string, string>("Call", "CallState", "End");
             }
         }
 
@@ -127,18 +181,42 @@ namespace OwnLink.ViewModel
             }
         }
 
+
+        public void resumeCall()
+        {
+            if (curCall.State==CallState.Paused)
+                curCall.Resume();
+        }
         private bool OnTimerTick()
         {
-            if (Core.CallsNb > 0)
+            try
             {
-                if (IsAccept)
-                    Duration += 1;
-                return true;
+                if (curCall.State == CallState.Paused)
+                    IsPaused = true;
+                else
+                    IsPaused = false;
+                if (Core.CallsNb > 0)
+                {
+                    if (IsAccept)
+                        Duration += 1;
+                    return true;
+                }
+                else
+                {
+                    //playSoundService.StopSystemSound();
+                    MessagingCenter.Send<string, string>("Call", "CallState", "End");
+                    return false;
+                }
+                
+                
             }
-            else
+            catch(Exception ex)
             {
-                //playSoundService.StopSystemSound();
-                MessagingCenter.Send<string, string>("Call", "CallState", "End");
+                //MessagingCenter.Send<string, string>("Call", "CallState", "End");
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Current call dont exist. CallPage. OnTimerTick " + ex.Message);
                 return false;
             }
         }
@@ -249,6 +327,22 @@ namespace OwnLink.ViewModel
                     OnPropertyChanged("IsMicOn");
                     OnPropertyChanged("MicButtonColor");
                     OnPropertyChanged("MicLabelTextColor");
+                }
+            }
+        }
+
+        public bool IsPaused
+        {
+            get
+            {
+                return _isPaused;
+            }
+            set
+            {
+                if (_isPaused != value)
+                {
+                    _isPaused = value;
+                    OnPropertyChanged("IsPaused");
                 }
             }
         }

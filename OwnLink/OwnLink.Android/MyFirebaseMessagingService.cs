@@ -128,10 +128,10 @@ namespace OwnLink.Android
                 CreateNotificationChannel();
             }
 
-            string title = "767";
+            string title = "Входящий звонок";
             if (data.ContainsKey("type"))
                 title = data["type"];
-            string body = "657";
+            string body = "";
             if (data.ContainsKey("caller_name"))
                 body = data["caller_name"];
 
@@ -176,7 +176,7 @@ namespace OwnLink.Android
         void CreateNotificationChannel()
         {
             manager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
-
+            
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 var channelNameJava = new Java.Lang.String(channelName);

@@ -18,7 +18,7 @@ namespace OwnLink.Android
     {
         public string GetToken()
         {
-            return FirebaseInstanceId.Instance.Token; ;
+            return FirebaseInstanceId.Instance.Token;
         }
     }
 }

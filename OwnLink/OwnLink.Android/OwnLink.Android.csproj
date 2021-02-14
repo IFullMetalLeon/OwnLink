@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="AndroidFCMService.cs" />
     <Compile Include="AndroidNotificationManager.cs" />
+    <Compile Include="AndroidOpenSettings.cs" />
     <Compile Include="AndroidPlaySoundService.cs" />
     <Compile Include="AndroidSpeakerPhone.cs" />
     <Compile Include="CallJournal.cs" />
@@ -158,6 +159,14 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon192.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\FailCall.png" />
+  </ItemGroup>
   <Import Project="..\OwnLink\OwnLink.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties TriggeredFromHotReload="False" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

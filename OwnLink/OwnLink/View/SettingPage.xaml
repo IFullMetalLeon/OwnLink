@@ -12,7 +12,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="6*"/>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Button x:Name="showWeb" Grid.Row="0" Text="Перейти на сайт" Command="{Binding openUri}"/>
                 <Frame Grid.Row="1" BackgroundColor="White" CornerRadius="10" Margin="5" BorderColor="Black">
@@ -31,6 +32,8 @@
                         <Button x:Name="sendMessage" Grid.Row="4" Text="Отправить" Command="{Binding sendMsg}" Margin="0"/>
                     </Grid>
                 </Frame>
+                <Button x:Name="openSettings" Grid.Row="2" Text="Перейти в Настройки" Command="{Binding goToSettings}"/>
+                <Button x:Name="downloads" Grid.Row="3" Text="Скачать последнюю версию" Command="{Binding goDownLoad}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

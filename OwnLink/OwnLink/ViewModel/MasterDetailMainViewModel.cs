@@ -19,7 +19,7 @@ namespace OwnLink.ViewModel
     public class MasterDetailMainViewModel : INotifyPropertyChanged
     {
 
-        private Core Core
+        public Core Core
         {
             get
             {
@@ -37,6 +37,7 @@ namespace OwnLink.ViewModel
 
         public INotificationManager notificationManager;
         public IFCMService fCMService;
+        public IOpenSettings openSettings;
 
         public string _phone { get; set; }
         public string _pass { get; set; }
@@ -57,6 +58,7 @@ namespace OwnLink.ViewModel
 
             notificationManager = DependencyService.Get<INotificationManager>();
             fCMService = DependencyService.Get<IFCMService>();
+            openSettings = DependencyService.Get<IOpenSettings>();
 
             Core.Listener.OnRegistrationStateChanged += OnRegistration;
             Core.Listener.OnCallStateChanged += OnCall;
@@ -142,12 +144,20 @@ namespace OwnLink.ViewModel
             Core.RingerDevice = null;
             Core.RemoteRingbackTone = null;
             Core.RingDuringIncomingEarlyMedia = false;
-            Core.PushNotificationEnabled = false;
+            //Core.PushNotificationEnabled = false;
+
+            isNotifySend = 0;            
 
             if (Core.CallsNb > 0)
             {
-                isNotifySend = 0;
+                isNotifySend = 1;
                 MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
+            }
+
+            string isNotificationPermission = CrossSettings.Current.GetValueOrDefault("sipNotifyPer", "0");
+            if (isNotificationPermission == "0")
+            {
+                checkNotifyPermission();
             }
         }
 
@@ -178,42 +188,68 @@ namespace OwnLink.ViewModel
                 });
                 if (result)
                 {
-                    await Launcher.OpenAsync("http://ic.pismo-fsin.ru/upgrade/OwnLink.fsin.apk");
+                    await Launcher.OpenAsync("https://ic.pismo-fsin.ru/upgrade/OwnLink.fsin.apk");
                 }               
                     
             }
         }
 
+        public async void checkNotifyPermission()
+        {
+            var result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+            {
+                Title = "Дополнительные разрешения",
+                Message = "Для корректной работы приложения нужно перейти в Настройки и включить для приложения Автозапуск и разрешить Уведомления.",
+                OkText = "Настройки",
+                CancelText = "Отмена"
+            });
+            if (result)
+            {
+                openSettings.GoToSettings();
+                CrossSettings.Current.AddOrUpdateValue("sipNotifyPer", "1");
+            }
+        }
+
         public void reconnect()
         {
-            Core.ClearAllAuthInfo();
-            Core.ClearProxyConfig();
-            RegStatus = "Не в сети";
-            RegTextColor = "Red";
+            try
+            {
+                Core.ClearAllAuthInfo();
+                Core.ClearProxyConfig();
+                RegStatus = "Не в сети";
+                RegTextColor = "Red";
 
-            var authInfo = Factory.Instance.CreateAuthInfo(Phone, null, _pass, null, null, "ic.pismo-fsin.ru");
-            var transports = Core.Transports;
-            transports.UdpPort = 0;
-            transports.TlsPort = 5061;
-            transports.TcpPort = 0;
-            Core.Transports = transports;
-            Core.AddAuthInfo(authInfo);
+                var authInfo = Factory.Instance.CreateAuthInfo(Phone, null, _pass, null, null, "ic.pismo-fsin.ru");
+                var transports = Core.Transports;
+                transports.UdpPort = 0;
+                transports.TlsPort = 5061;
+                transports.TcpPort = 0;
+                Core.Transports = transports;
+                Core.AddAuthInfo(authInfo);
 
-            var proxyConfig = Core.CreateProxyConfig();
-            var identity = Factory.Instance.CreateAddress("sip:"+Phone+"@ic.pismo-fsin.ru");
-            identity.Username = Phone;
-            identity.Domain = "ic.pismo-fsin.ru";
-            identity.Transport =  Linphone.TransportType.Tls;
-            proxyConfig.Edit();
-            proxyConfig.IdentityAddress = identity;
-            proxyConfig.ServerAddr = "ic.pismo-fsin.ru";
-            proxyConfig.Route = "ic.pismo-fsin.ru";
-            proxyConfig.RegisterEnabled = true;
-            proxyConfig.Done();
-            Core.AddProxyConfig(proxyConfig);
-            Core.DefaultProxyConfig = proxyConfig;
+                var proxyConfig = Core.CreateProxyConfig();
+                var identity = Factory.Instance.CreateAddress("sip:" + Phone + "@ic.pismo-fsin.ru");
+                identity.Username = Phone;
+                identity.Domain = "ic.pismo-fsin.ru";
+                identity.Transport = Linphone.TransportType.Tls;
+                proxyConfig.Edit();
+                proxyConfig.IdentityAddress = identity;
+                proxyConfig.ServerAddr = "ic.pismo-fsin.ru";
+                proxyConfig.Route = "ic.pismo-fsin.ru";
+                proxyConfig.RegisterEnabled = true;
+                proxyConfig.Done();
+                Core.AddProxyConfig(proxyConfig);
+                Core.DefaultProxyConfig = proxyConfig;
 
-            Core.RefreshRegisters();
+                Core.RefreshRegisters();
+            }
+            catch(Exception ex)
+            {
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Core init error. MainPage. reconnect " + ex.Message);
+            }
             
            // notificationManager.ScheduleNotification("Своя Связь", "тест");
 
@@ -248,12 +284,12 @@ namespace OwnLink.ViewModel
                             MessagingCenter.Send<string, string>("Call", "CallState", "Incoming");
                         else
                         {
-                            if (isNotifySend == 0)
-                            {
-                                string userName = Core.CurrentCall.RemoteAddress.Username;
+                            //if (isNotifySend == 0)
+                            //{
+                                string userName = Core.CurrentCall.RemoteAddress.DisplayName;
                                 notificationManager.ScheduleNotification("Своя Связь", "Входящий звонок " + userName);
                                 isNotifySend = 1;
-                            }
+                            //}
                         }
                     }
                     else if (Core.CurrentCall.State == CallState.StreamsRunning)
@@ -264,7 +300,12 @@ namespace OwnLink.ViewModel
             }
             catch(Exception ex)
             {
-                UserDialogs.Instance.Alert(ex.Message);
+                //UserDialogs.Instance.Alert(ex.Message);
+                string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+                string deviceId = CrossDeviceInfo.Current.Id;
+                string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Call OnCall. MainPage. OnCall " + ex.Message);
+                MessagingCenter.Send<string, string>("Call", "CallState", "End");
             }
         }
       

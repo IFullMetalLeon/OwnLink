@@ -36,4 +36,9 @@ namespace OwnLink
     {
         string GetToken();
     }
+
+    public interface IOpenSettings
+    {
+        void GoToSettings();
+    }
 }

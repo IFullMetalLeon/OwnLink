@@ -5,6 +5,7 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using OwnLink.ViewModel;
+using Plugin.DeviceInfo;
 
 namespace OwnLink
 {
@@ -27,10 +28,21 @@ namespace OwnLink
         public App(IntPtr context)
         {
             InitializeComponent();
-            Manager = new LinphoneManager();
-            Manager.Init(ConfigFilePath, FactoryFilePath, context);
-
+            
             string _login = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+            string deviceId = CrossDeviceInfo.Current.Id;
+            string deviceInfo = CrossDeviceInfo.Current.Manufacturer + " " + CrossDeviceInfo.Current.Model + " " + CrossDeviceInfo.Current.Platform + " " + CrossDeviceInfo.Current.Version;
+            try
+            {
+                Manager = new LinphoneManager();
+                Manager.Init(ConfigFilePath, FactoryFilePath, context);
+            }
+            catch(Exception ex)
+            {
+                HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Core init fail. App.xaml.cs "+ex.Message);
+            }
+            //MainPage = new NavigationPage(new TestPage());
+
             if (_login == "")
             {
                 MainPage = new NavigationPage(new LoginPage());

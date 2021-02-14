@@ -7,37 +7,13 @@
              x:Class="OwnLink.View.TestPage"
              x:Name="testPage">
     <ContentPage.Content>
-        <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="6*"/>
-                    <RowDefinition Height="2*"/>
-            </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Frame Grid.Row="2" Grid.Column="0" CornerRadius="10">
-                    <Frame.GestureRecognizers>
-                        <SwipeGestureRecognizer Direction="Up" Command="{Binding Path=BindingContext.SwipeButton, Source={x:Reference testPage}}"/>
-                    </Frame.GestureRecognizers>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Text="^" FontSize="16"/>
-                        <Label Grid.Row="1" Text="^" FontSize="16"/>
-                        <Label Grid.Row="2" Text="11"/>
-                    </Grid>
-
-                </Frame>
-                <Frame Grid.Row="2" Grid.Column="2" >
-                    <Label Text="33"/>
-                </Frame>
-            </Grid>
+        <StackLayout BackgroundColor="White">
+            <Frame BackgroundColor="White" Margin="10,5,10,5" HasShadow="False">
+                <StackLayout>
+                    <Label Text="Россия"/>
+                    <BoxView HeightRequest="2" BackgroundColor="#658FCE"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

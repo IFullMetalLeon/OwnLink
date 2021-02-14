@@ -158,5 +158,21 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public static async void ErrorLogSend(string _phone, string _device_info, string _deviceId,string _text)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(mainUrl + "crash_report");
+            var values = new Dictionary<string, string>();
+            values.Add("phone", _phone);
+            values.Add("device_id", _deviceId);
+            values.Add("device_info", _deviceId);
+            values.Add("text", _text);
+
+            var response = await http.PostAsync(http.BaseAddress, new FormUrlEncodedContent(values));
+
+            string content = await response.Content.ReadAsStringAsync();
+            
+        }
+
     }
 }

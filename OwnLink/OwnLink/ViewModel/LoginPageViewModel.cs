@@ -38,6 +38,9 @@ namespace OwnLink.ViewModel
         public bool _isNumberVisible { get; set; }
         public bool _counrtyListVisible { get; set; }
         public string _iCallText { get; set; }
+        public string _resultText { get; set; }
+        public string _resultTextColor { get; set; }
+        public bool _isResultTextVisible { get; set; }
         public bool _iCallEnb { get; set; }
         public int _countdown;
         public int callFlag;
@@ -48,7 +51,6 @@ namespace OwnLink.ViewModel
         public ICommand ICallSend { get; set; }
         public ICommand SendCode { get; set; }
         public ICommand CountryTap { get; set; }
-
         public LoginPageViewModel()
         {
             ICallSend = new Command(sendCall);
@@ -64,8 +66,6 @@ namespace OwnLink.ViewModel
             CountryList = new ObservableCollection<Countries>();
             CounrtiesList = new ObservableCollection<Countries>();
             CounrtySelected = new Countries();
-
-            
 
         }
 
@@ -91,6 +91,7 @@ namespace OwnLink.ViewModel
                 Phone = cPref;
 
             CounrtyListVisible = false;
+            IsResultTextVisible = false;
             CountrySelectArrow = "&#xE70D;";
 
             InitCountry();
@@ -104,6 +105,16 @@ namespace OwnLink.ViewModel
                 IsNumberVisible = true;
             CounrtySearchText = "";
             SearchCountry();
+
+            foreach (Countries qq in CountryList)
+            {
+                if (qq.Name == "Россия")
+                {
+                    CounrtySelected = new Countries() { Name = qq.Name, AlterName = qq.AlterName, Pref = qq.Pref };
+                    OnPropertyChanged("CounrtySelected");
+                    SelectCountry();
+                }
+            }
         }
 
         public void endPage()
@@ -114,6 +125,7 @@ namespace OwnLink.ViewModel
 
         public void sendCall()
         {
+            IsResultTextVisible = false;
             HttpControler.register(Phone, "","","");          
         }
 
@@ -139,7 +151,10 @@ namespace OwnLink.ViewModel
                 {
                     if (tmp.login == null)
                     {
-                        UserDialogs.Instance.Alert(tmp.message);
+                        ResultText = tmp.message;
+                        ResultTextColor = "#616161";
+                        IsResultTextVisible = true;
+                        //UserDialogs.Instance.Alert(tmp.message);
                         IsCodeSmsVisible = true;
                         Device.StartTimer(TimeSpan.FromSeconds(1), OnTimerTick);
                         _countdown = 120;
@@ -154,7 +169,12 @@ namespace OwnLink.ViewModel
                     }
                 }
                 else
-                    UserDialogs.Instance.Alert(tmp.message);
+                {
+                    ResultText = tmp.message;
+                    ResultTextColor = "#DD2C00";
+                    IsResultTextVisible = true;
+                    //UserDialogs.Instance.Alert(tmp.message);
+                }
             }
         }
 
@@ -600,6 +620,53 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public string ResultText
+        {
+            get
+            {
+                return _resultText;
+            }
+            set
+            {
+                if (_resultText != value)
+                {
+                    _resultText = value;
+                    OnPropertyChanged("ResultText");
+                }
+            }
+        }
+
+        public string ResultTextColor
+        {
+            get
+            {
+                return _resultTextColor;
+            }
+            set
+            {
+                if (_resultTextColor != value)
+                {
+                    _resultTextColor = value;
+                    OnPropertyChanged("ResultTextColor");
+                }
+            }
+        }
+
+        public bool IsResultTextVisible
+        {
+            get
+            {
+                return _isResultTextVisible;
+            }
+            set
+            {
+                if (_isResultTextVisible != value)
+                {
+                    _isResultTextVisible = value;
+                    OnPropertyChanged("IsResultTextVisible");
+                }
+            }
+        }
         public bool ICallEnb
         {
             get
@@ -613,6 +680,28 @@ namespace OwnLink.ViewModel
                     _iCallEnb = value;
                     OnPropertyChanged("ICallEnb");
                 }
+            }
+        }
+
+        public string ICallBG
+        {
+            get
+            {
+                if (ICallEnb)
+                    return "#658FCE";
+                else
+                    return "#E0E0E0";
+            }
+        }
+
+        public string ICallTC
+        {
+            get
+            {
+                if (ICallEnb)
+                    return "#FFFFFF";
+                else
+                    return "#9E9E9E";
             }
         }
 

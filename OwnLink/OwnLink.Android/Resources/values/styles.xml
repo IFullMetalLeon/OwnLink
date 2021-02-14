@@ -2,8 +2,8 @@
 <resources>
 
   <style name="MainTheme" parent="MainTheme.Base">
-    <item name="colorPrimary">#3399ff</item>
-    <item name="colorPrimaryDark">#3399ff</item>
+    <item name="colorPrimary">#FFFFFF</item>
+    <item name="colorPrimaryDark">#FFFFFF</item>
 
     <item name="android:windowBackground">@drawable/splash_screen</item>
   </style>
@@ -15,9 +15,9 @@
     <item name="windowActionBar">false</item>
     <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette -->
     <!-- colorPrimary is used for the default action bar background -->
-    <item name="colorPrimary">#2196F3</item>
+    <item name="colorPrimary">#FFFFFF</item>
     <!-- colorPrimaryDark is used for the status bar -->
-    <item name="colorPrimaryDark">#1976D2</item>
+    <item name="colorPrimaryDark">#FFFFFF</item>
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
     <item name="colorAccent">#FF4081</item>
