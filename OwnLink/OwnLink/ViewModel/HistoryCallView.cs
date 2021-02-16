@@ -72,10 +72,10 @@ namespace OwnLink.ViewModel
                         mm += (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
                     else
                         mm += "0" + (Convert.ToInt32(HistoryCall.duration) / 60).ToString();
-                    return " | " + mm + ":" + ss;
+                    return " " + mm + ":" + ss;
                 }
                 else
-                    return "";
+                    return " 00:00";
             }
             set
             {
@@ -91,7 +91,10 @@ namespace OwnLink.ViewModel
         {
             get
             {
-                return HistoryCall.who_call;
+                if (!String.IsNullOrEmpty(HistoryCall.who_call))
+                    return HistoryCall.who_call;
+                else
+                    return "Unknown";
             }
             set
             {
@@ -130,6 +133,28 @@ namespace OwnLink.ViewModel
                     return "Black";
                 else
                     return "Red";
+            }
+        }
+
+        public string DurationTC
+        {
+            get
+            {
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                    return "#00C853";
+                else
+                    return "#F44336";
+            }
+        }
+
+        public string IconName
+        {
+            get
+            {
+                if (HistoryCall.type.ToUpper() == "ANSWERED")
+                    return "AccCall.png";
+                else
+                    return "FailCall.png";
             }
         }
 

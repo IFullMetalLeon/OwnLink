@@ -4,17 +4,18 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="История звонков"
+             Title="История звонков"            
              x:Class="OwnLink.View.HistoryCallPage">
     <ContentPage.Content>
         <StackLayout BackgroundColor="White">
             <ListView ItemsSource="{Binding historyCalls}"
                       HasUnevenRows="True"
-                      SeparatorVisibility="Default">
+                      SeparatorVisibility="None"
+                      VerticalScrollBarVisibility="Default">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="0" Margin="30,0,1,0" BackgroundColor="White">
+                            <Grid Padding="0" Margin="15,0,1,0" BackgroundColor="White">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
@@ -30,8 +31,10 @@
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="8*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="FailCall.png"/>
-                                    <Label Grid.Column="1" Text="{Binding Duration}"/>    
+                                    <StackLayout Grid.Column="0">
+                                        <Image Source="{Binding IconName}" HeightRequest="12" WidthRequest="12" Aspect="AspectFit"/>
+                                    </StackLayout>
+                                    <Label Grid.Column="1" Text="{Binding Duration}" TextColor="{Binding DurationTC}" FontSize="12"/>    
                                 </Grid>
                                                                
                             </Grid>
