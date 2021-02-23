@@ -8,6 +8,7 @@
              x:Class="OwnLink.View.HistoryCallPage">
     <ContentPage.Content>
         <StackLayout BackgroundColor="White">
+            <BoxView BackgroundColor="#E0E0E0" HeightRequest="1"/>
             <ListView ItemsSource="{Binding historyCalls}"
                       HasUnevenRows="True"
                       SeparatorVisibility="None"

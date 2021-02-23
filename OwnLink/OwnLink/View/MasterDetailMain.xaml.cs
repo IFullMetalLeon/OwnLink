@@ -40,7 +40,7 @@ namespace OwnLink.View
             isCallShow = 0;
             if (flag == 0 )
             {
-                Detail = new NavigationPage(new HistoryCallPage());
+                Detail = new NavigationPage(new HistoryCallPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
                 IsPresented = true;
                 NavigationPage.SetHasNavigationBar(this, false);
                 NavigationPage.SetHasBackButton(this, false);
@@ -68,13 +68,13 @@ namespace OwnLink.View
 
         private void historyCall_Clicked(object sender, EventArgs e)
         {
-            Detail = new NavigationPage(new HistoryCallPage());
+            Detail = new NavigationPage(new HistoryCallPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
             IsPresented = false;
         }
 
         private void setting_Clicked(object sender, EventArgs e)
         {
-            Detail = new NavigationPage(new SettingPage());
+            Detail = new NavigationPage(new SettingPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
             IsPresented = false;
         }
 
@@ -93,7 +93,7 @@ namespace OwnLink.View
             {
                 mdmvm.Core.TerminateAllCalls();
                 isCallShow = 0;
-                Detail = new NavigationPage(new HistoryCallPage());
+                Detail = new NavigationPage(new HistoryCallPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
                 IsPresented = false;
             }
         }

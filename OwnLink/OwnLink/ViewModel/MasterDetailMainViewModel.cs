@@ -42,8 +42,8 @@ namespace OwnLink.ViewModel
         public string _phone { get; set; }
         public string _pass { get; set; }
         public string _regStatus { get; set; }
-        public string _regTextColor { get; set; }
         public string _versionNumber { get; set; }
+        public string _regStatusIcon { get; set; }
         public INavigation Navigation { get; set; }
         public Command ChangePhone { get; set; }
         public Command Reconnect { get; set; }
@@ -91,13 +91,13 @@ namespace OwnLink.ViewModel
             //_pass = "BYMyt3rL8T9wfBdY";
 
 
-            RegStatus = "Не в сети";
-            RegTextColor = "Red";
+            RegStatus = "Оффлайн";
+            RegStatusIcon = "StatusOffline.png";
             if (Core.DefaultProxyConfig?.State == RegistrationState.Ok)
             {
                 Core.EnsureRegistered();
-                RegStatus = "Активен";
-                RegTextColor = "Green";
+                RegStatus = "Онлайн";
+                RegStatusIcon = "StatusOnline.png";
             }
             else
                 reconnect();
@@ -216,8 +216,8 @@ namespace OwnLink.ViewModel
             {
                 Core.ClearAllAuthInfo();
                 Core.ClearProxyConfig();
-                RegStatus = "Не в сети";
-                RegTextColor = "Red";
+                RegStatus = "Оффлайн";
+                RegStatusIcon = "StatusOffline.png";
 
                 var authInfo = Factory.Instance.CreateAuthInfo(Phone, null, _pass, null, null, "ic.pismo-fsin.ru");
                 var transports = Core.Transports;
@@ -259,13 +259,13 @@ namespace OwnLink.ViewModel
         {
             if (state == RegistrationState.Ok)
             {
-                RegStatus = "Активен";
-                RegTextColor = "Green";
+                RegStatus = "Онлайн";
+                RegStatusIcon = "StatusOnline.png";
             }
             if (state == RegistrationState.Progress)
             {
                 RegStatus = "Подключение";
-                RegTextColor = "Orange";
+                RegStatusIcon = "StatusPending.png";
             }
         }
 
@@ -356,22 +356,6 @@ namespace OwnLink.ViewModel
             }
         }
 
-        public string RegTextColor
-        {
-            get
-            {
-                return _regTextColor;
-            }
-            set
-            {
-                if (_regTextColor != value)
-                {
-                    _regTextColor = value;
-                    OnPropertyChanged("RegTextColor");
-                }
-            }
-        }
-
         public string VersionNumber
         {
             get
@@ -384,6 +368,22 @@ namespace OwnLink.ViewModel
                 {
                     _versionNumber = value;
                     OnPropertyChanged("VersionNumber");
+                }
+            }
+        }
+
+        public string RegStatusIcon
+        {
+            get
+            {
+                return _regStatusIcon;
+            }
+            set
+            {
+                if (_regStatusIcon != value)
+                {
+                    _regStatusIcon = value;
+                    OnPropertyChanged("RegStatusIcon");
                 }
             }
         }

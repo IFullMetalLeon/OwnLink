@@ -42,15 +42,19 @@ namespace OwnLink
                 HttpControler.ErrorLogSend(_login, deviceInfo, deviceId, "Core init fail. App.xaml.cs "+ex.Message);
             }
             //MainPage = new NavigationPage(new TestPage());
-
             if (_login == "")
             {
-                MainPage = new NavigationPage(new LoginPage());
+                MainPage = new NavigationPage(new LoginPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
+                //((NavigationPage)Xamarin.Forms.Application.Current.MainPage).BarBackgroundColor = Color.FromHex("#FF4C3F");
+
+
             }
             else
             {
-                MainPage = new NavigationPage(new MasterDetailMain());
+                MainPage = new NavigationPage(new MasterDetailMain()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
+                //((NavigationPage)Xamarin.Forms.Application.Current.MainPage).BarBackgroundColor = Color.FromHex("#FF4C3F");
             }
+            
             flagSleep = 0;
         }
 

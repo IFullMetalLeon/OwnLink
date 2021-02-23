@@ -7,34 +7,39 @@
              Title="Тех. поддержка"
              x:Class="OwnLink.View.SettingPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Grid>
+        <StackLayout BackgroundColor="#FFFFFF">
+            <Grid Margin="16">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="1.2*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="0.8*"/>
                     <RowDefinition Height="1*"/>
-                    <RowDefinition Height="6*"/>
                     <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="showWeb" Grid.Row="0" Text="Перейти на сайт" Command="{Binding openUri}"/>
-                <Frame Grid.Row="1" BackgroundColor="White" CornerRadius="10" Margin="5" BorderColor="Black">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Text="Сообщите нам об ошибке" HorizontalTextAlignment="Center" Margin="0"/>
-                        <Entry x:Name="userEmail" Grid.Row="1" Text="{Binding UserEmail}" Placeholder="Укажите свою почту" PlaceholderColor="Gray" Margin="0"/>
-                        <Editor x:Name="userMessage" Grid.Row="2" Placeholder="Сообщение" HeightRequest="200" TextColor="Black" Text="{Binding UserMessage}" Margin="0"/>
-                        <Button x:Name="filePicker" Grid.Row="3" Text="{Binding FilePicker}" Command="{Binding filePick}" Margin="0"/>
-                        <Button x:Name="sendMessage" Grid.Row="4" Text="Отправить" Command="{Binding sendMsg}" Margin="0"/>
-                    </Grid>
-                </Frame>
-                <Button x:Name="openSettings" Grid.Row="2" Text="Перейти в Настройки" Command="{Binding goToSettings}"/>
-                <Button x:Name="downloads" Grid.Row="3" Text="Скачать последнюю версию" Command="{Binding goDownLoad}"/>
+                <Label Grid.Row="0"  Text="Сообщить разработчику об ошибке" FontSize="14" Margin="0"/>
+                <Entry x:Name="userEmail" Grid.Row="1" Text="{Binding UserEmail}" Placeholder="Напишите вашу почту" PlaceholderColor="#BDBDBD" TextColor="Black" Margin="0"/>
+                <Editor x:Name="userMessage" Grid.Row="2" Placeholder="Описание проблемы" PlaceholderColor="#BDBDBD" HeightRequest="200" TextColor="Black" Text="{Binding UserMessage}" Margin="0"/>
+                <Button x:Name="filePicker" Grid.Row="3" IsVisible="{Binding IsVisibleFilePicker}" Text="ВЫБОР ФАЙЛА" Command="{Binding filePick}" Margin="0" CornerRadius="10" BackgroundColor="#EEEEEE"/>
+                <Grid IsVisible="{Binding IsVisibleFileSelect}" Grid.Row="3" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="{Binding FilePicker}" FontSize="14" TextColor="#000000"/>
+                    <Button x:Name="deleteFile" Grid.Column="1" Command="{Binding fileDelete}" ImageSource="DeleteFile.png" BackgroundColor="#FFFFFF"/>
+                </Grid>
+                <Button x:Name="sendMessage" Grid.Row="4" Text="Отправить" Command="{Binding sendMsg}"  BackgroundColor="#658FCE" TextColor="#FFFFFF" CornerRadius="10" Margin="0"/>
+                <Label Text="Скачать последнюю версию" Grid.Row="5" TextDecorations="Underline" TextColor="#196DEA" HorizontalTextAlignment="Center" Margin="0" VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding goDownLoad}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Button x:Name="openSettings" Grid.Row="6" Text="Перейти в Настройки" Command="{Binding goToSettings}" BackgroundColor="#EEEEEE"  Margin="0" CornerRadius="10"/>
             </Grid>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

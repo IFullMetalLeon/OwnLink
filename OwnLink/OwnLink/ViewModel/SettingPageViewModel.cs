@@ -25,6 +25,7 @@ namespace OwnLink.ViewModel
         public string _uri { get; set; }
         public ICommand openUri { get; set; }
         public ICommand filePick { get; set; }
+        public ICommand fileDelete { get; set; }
         public ICommand sendMsg { get; set; }
         public ICommand goToSettings { get; set; }
         public ICommand goDownLoad { get; set; }
@@ -35,12 +36,14 @@ namespace OwnLink.ViewModel
         public string _userEmail { get; set; }
         public string _userMessage { get; set; }
         public string _filePicker { get; set; }
+        public bool _isFileSelect { get; set; }
 
         public SettingPageViewModel()
         {
             _uri = "http://xn--b1akbuscr4eza.xn--p1ai/";
             openUri = new Command(showUri);
             filePick = new Command(fileOpen);
+            fileDelete = new Command(fileClear);
             sendMsg = new Command(sendMessage);
             goToSettings = new Command(settings);
             goDownLoad = new Command(downloads);
@@ -50,6 +53,7 @@ namespace OwnLink.ViewModel
             UserEmail = "";
             UserMessage = "";
             fileName = "";
+            IsVisibleFilePicker = true;
         }
 
         public void startPage()
@@ -85,8 +89,17 @@ namespace OwnLink.ViewModel
 
             fileName = fileData.FilePath;
             FilePicker = "Выбран файл " + fileData.FileName;
+            IsVisibleFilePicker = false;
             //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
         }
+
+        public void fileClear()
+        {
+            fileName = "";
+            FilePicker = "";
+            IsVisibleFilePicker = true;
+        }
+
 
         public void sendMessage()
         {
@@ -182,6 +195,31 @@ namespace OwnLink.ViewModel
                     _filePicker = value;
                     OnPropertyChanged("FilePicker");
                 }
+            }
+        }
+
+        public bool IsVisibleFilePicker
+        {
+            get
+            {
+                return _isFileSelect;
+            }
+            set
+            {
+                if (_isFileSelect != value)
+                {
+                    _isFileSelect = value;
+                    OnPropertyChanged("IsVisibleFilePicker");
+                    OnPropertyChanged("IsVisibleFileSelect");
+                }
+            }
+        }
+
+        public bool IsVisibleFileSelect
+        {
+            get
+            {
+                return !_isFileSelect;
             }
         }
     }

@@ -7,23 +7,49 @@
              x:Class="OwnLink.View.CallPage"
              x:Name="callPage">
     <ContentPage.Content>
-        <Grid BackgroundColor="White">
+        <Grid BackgroundColor="#000000">
             <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
                 <RowDefinition Height="5*"/>
-                <RowDefinition Height="5*"/>
-                
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-            <Frame Grid.Row="0">
+            <Frame Grid.Row="0" HasShadow="False" BackgroundColor="#000000">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" />
-                    <Label x:Name="duration" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}"/>
+                    <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" TextColor="#FFFFFF" />
+                    <Label x:Name="duration" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}" TextColor="#FFFFFF"/>
                 </Grid>
             </Frame>
-            <Frame Grid.Row="1" CornerRadius="20" BackgroundColor="White">
+
+            <Frame Grid.Row="1" HasShadow="False" BackgroundColor="#000000">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Frame Grid.Row="0" IsVisible="{Binding IsAccept}" BackgroundColor="#000000">
+                        
+                    </Frame>
+
+                    <Frame Grid.Row="1" IsVisible="{Binding IsIncoming}" BackgroundColor="#000000">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ImageButton Grid.Column="0" Source="DeclineCall.png" Aspect="AspectFit" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
+                            <ImageButton Grid.Column="1" Source="AcceptCall.png" Aspect="AspectFill" BackgroundColor="#19B933" Command="{Binding AcceptCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
+                        </Grid>
+                    </Frame>
+                    <ImageButton Grid.Row="1" IsVisible="{Binding IsAccept}" Source="DeclineCall.png" Aspect="AspectFill" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
+
+                </Grid>
+            </Frame>
+            
+            <!--<Frame Grid.Row="1" CornerRadius="20" BackgroundColor="White">
                 <StackLayout>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -98,7 +124,7 @@
                     </Grid>
 
                 </StackLayout>
-            </Frame>
+            </Frame>!-->
             <!--<Button Grid.Row="2" x:Name="resumeButton" Text="Возобновить" IsVisible="{Binding IsPaused}" Command="{Binding ResumeCall}"/>!-->
         </Grid>
     </ContentPage.Content>
