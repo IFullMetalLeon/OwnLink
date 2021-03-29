@@ -50,6 +50,7 @@ namespace OwnLink.ViewModel
 
         public int isNotifySend;
 
+        public string _uri;
 
         public MasterDetailMainViewModel()
         {
@@ -65,6 +66,7 @@ namespace OwnLink.ViewModel
             Core.Listener.OnLogCollectionUploadStateChanged += OnLogCollectionUpload;
 
             isNotifySend = 0;
+            _uri = "http://xn--b1akbuscr4eza.xn--p1ai/";
         }
 
         public void startPage()
@@ -81,7 +83,7 @@ namespace OwnLink.ViewModel
             Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
             _pass = CrossSettings.Current.GetValueOrDefault("sipPhonePass", "");
 
-            VersionNumber = CrossDeviceInfo.Current.AppVersion;
+            VersionNumber = "Версия "+CrossDeviceInfo.Current.AppVersion;
 
             string curFCMToken = fCMService.GetToken();
 
@@ -308,7 +310,11 @@ namespace OwnLink.ViewModel
                 MessagingCenter.Send<string, string>("Call", "CallState", "End");
             }
         }
-      
+
+        public void showUri()
+        {
+            Launcher.OpenAsync(_uri);
+        }
 
         private void OnLogCollectionUpload(Core lc, CoreLogCollectionUploadState state, string info)
         {

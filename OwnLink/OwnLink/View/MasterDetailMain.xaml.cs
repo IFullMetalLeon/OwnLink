@@ -59,7 +59,7 @@ namespace OwnLink.View
 
         private void activeCall_Clicked(object sender, EventArgs e)
         {           
-            if (mdmvm.Core.CallsNb > 0)
+            if (mdmvm.Core.CallsNb > 0 && mdmvm.Core.CurrentCall!=null)
             {
                 Detail = new NavigationPage(new CallPage());
                 IsPresented = false;
@@ -76,6 +76,11 @@ namespace OwnLink.View
         {
             Detail = new NavigationPage(new SettingPage()) { BarBackgroundColor = Color.FromHex("#FFFFFF"), BarTextColor = Color.FromHex("#000000") };
             IsPresented = false;
+        }
+
+        private void web_Clicked(object sender, EventArgs e)
+        {
+            mdmvm.showUri();
         }
 
         private void showCall(string content)

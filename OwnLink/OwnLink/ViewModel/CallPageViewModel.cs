@@ -24,6 +24,10 @@ namespace OwnLink.ViewModel
         }
 
         public string _name { get; set; }
+        public string _microfonIcon { get; set; }
+        public string _microfonTc { get; set; }
+        public string _speakerIcon { get; set; }
+        public string _speakerTC { get; set; }
         public int _duration { get; set; }
         public bool _isAccept { get; set; }
         public bool _isPaused { get; set; }
@@ -58,11 +62,12 @@ namespace OwnLink.ViewModel
             playSoundService = DependencyService.Get<IPlaySoundService>();
             speakerPhone = DependencyService.Get<ISpeakerPhone>();
             firstOpen = true;
-            
+
         }
 
         public void startPage()
         {
+            //Name = "ИК2-Иркутская область";
             curCall = Core.CurrentCall;
             
             Name = "";
@@ -92,6 +97,10 @@ namespace OwnLink.ViewModel
                 IsMicOn = true;
                 firstOpen = false;
                 IsPaused = false;
+                MicrofonIcon = "MicrofonWhite.png";
+                MicrofonTC = "#FFFFFF";
+                SpeakerIcon = "SpeakerWhite.png";
+                SpeakerTC = "#FFFFFF";
             }
 
            // playSoundService.InitSystemSound();
@@ -107,6 +116,8 @@ namespace OwnLink.ViewModel
 
         public void accCall()
         {
+            //IsAccept = true;
+           // IsIncoming = false;
             try
             {
                 if (curCall != null)
@@ -132,6 +143,8 @@ namespace OwnLink.ViewModel
 
         public void cancelCall()
         {
+           // IsAccept = false;
+           // IsIncoming = true;
             try
             {
                 Core.TerminateAllCalls();
@@ -149,12 +162,33 @@ namespace OwnLink.ViewModel
 
         public void muteCall()
         {
+            /*IsMicOn = !IsMicOn;
+            if (IsMicOn)
+            {
+                MicrofonIcon = "MicrofonWhite.png";
+                MicrofonTC = "#FFFFFF";
+            }
+            else
+            {
+                MicrofonIcon = "MicrofonBlue.png";
+                MicrofonTC = "#00A3FF";
+            }*/
             try
             {
                 if (curCall != null)
                 {
                     curCall.MicrophoneMuted = !curCall.MicrophoneMuted;
                     IsMicOn = !IsMicOn;
+                    if (IsMicOn)
+                    {
+                        MicrofonIcon = "MicrofonWhite.png";
+                        MicrofonTC = "#FFFFFF";
+                    }
+                    else
+                    {
+                        MicrofonIcon = "MicrofonBlue.png";
+                        MicrofonTC = "#00A3FF";
+                    }
                 }
             }
             catch(Exception ex)
@@ -173,22 +207,27 @@ namespace OwnLink.ViewModel
             {
                 IsSpeakerPhoneOn = false;
                 speakerPhone.SpeakerphoneOff();
+                SpeakerIcon = "SpeakerWhite.png";
+                SpeakerTC = "#FFFFFF";
             }
             else
             {
                 IsSpeakerPhoneOn = true;
                 speakerPhone.SpeakerphoneOn();
+                SpeakerIcon = "SpeakerBlue.png";
+                SpeakerTC = "#00A3FF";
             }
         }
 
 
         public void resumeCall()
         {
-            if (curCall.State==CallState.Paused)
-                curCall.Resume();
+           // if (curCall.State==CallState.Paused)
+           //     curCall.Resume();
         }
         private bool OnTimerTick()
         {
+            //return true;
             try
             {
                 if (curCall.State == CallState.Paused)
@@ -245,7 +284,69 @@ namespace OwnLink.ViewModel
             }
         }
 
+        public string MicrofonIcon
+        {
+            get
+            {
+                return _microfonIcon;
+            }
+            set
+            {
+                if (_microfonIcon != value)
+                {
+                    _microfonIcon = value;
+                    OnPropertyChanged("MicrofonIcon");
+                }
+            }
+        }
 
+        public string MicrofonTC
+        {
+            get
+            {
+                return _microfonTc;
+            }
+            set
+            {
+                if (_microfonTc != value)
+                {
+                    _microfonTc = value;
+                    OnPropertyChanged("MicrofonTC");
+                }
+            }
+        }
+
+        public string SpeakerIcon
+        {
+            get
+            {
+                return _speakerIcon;
+            }
+            set
+            {
+                if (_speakerIcon != value)
+                {
+                    _speakerIcon = value;
+                    OnPropertyChanged("SpeakerIcon");
+                }
+            }
+        }
+
+        public string SpeakerTC
+        {
+            get
+            {
+                return _speakerTC;
+            }
+            set
+            {
+                if (_speakerTC != value)
+                {
+                    _speakerTC = value;
+                    OnPropertyChanged("SpeakerTC");
+                }
+            }
+        }
 
         public int Duration
         {

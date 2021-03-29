@@ -16,11 +16,11 @@
             <Frame Grid.Row="0" HasShadow="False" BackgroundColor="#000000">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Name}" TextColor="#FFFFFF" />
-                    <Label x:Name="duration" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding DurationFormat}" TextColor="#FFFFFF"/>
+                    <Label x:Name="nameCall" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="End" FontSize="26" Text="{Binding Name}" TextColor="#FFFFFF" />
+                    <Label x:Name="duration" Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Start"  VerticalOptions="Start" FontSize="22" Text="{Binding DurationFormat}" TextColor="#FFFFFF"/>
                 </Grid>
             </Frame>
 
@@ -30,102 +30,72 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Frame Grid.Row="0" IsVisible="{Binding IsAccept}" BackgroundColor="#000000">
-                        
-                    </Frame>
-
-                    <Frame Grid.Row="1" IsVisible="{Binding IsIncoming}" BackgroundColor="#000000">
+                    <Frame Grid.Row="0" IsVisible="{Binding IsAccept}" BackgroundColor="#000000" Margin="1" Padding="1" HasShadow="False">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <ImageButton Grid.Column="0" Source="DeclineCall.png" Aspect="AspectFit" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
-                            <ImageButton Grid.Column="1" Source="AcceptCall.png" Aspect="AspectFill" BackgroundColor="#19B933" Command="{Binding AcceptCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
+                            <Frame BackgroundColor="#000000" Grid.Column="0" Margin="1" Padding="1" HasShadow="False" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.MuteCall, Source={x:Reference callPage}}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Source="{Binding MicrofonIcon}" Aspect="AspectFit"  BackgroundColor="#000000" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Row="1" HorizontalOptions="Center" HorizontalTextAlignment="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Выкл." FontSize="16" TextColor="{Binding MicrofonTC}"/>
+                                                <Span Text="&#xA;"/>
+                                                <Span Text="микрофон" FontSize="16" TextColor="{Binding MicrofonTC}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Frame>
+                            <Frame BackgroundColor="#000000" Grid.Column="1" Margin="1" Padding="1" HasShadow="False" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.SpeakerCall, Source={x:Reference callPage}}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Source="{Binding SpeakerIcon}" Aspect="AspectFit" BackgroundColor="#000000" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Row="1" HorizontalOptions="Center" HorizontalTextAlignment="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Громкая" FontSize="16" TextColor="{Binding SpeakerTC}"/>
+                                                <Span Text="&#xA;"/>
+                                                <Span Text="связь" FontSize="16" TextColor="{Binding SpeakerTC}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Frame>
                         </Grid>
                     </Frame>
-                    <ImageButton Grid.Row="1" IsVisible="{Binding IsAccept}" Source="DeclineCall.png" Aspect="AspectFill" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="50" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="Start" Padding="10"/>
+
+                    <Frame Grid.Row="1" IsVisible="{Binding IsIncoming}" BackgroundColor="#000000" HorizontalOptions="Center">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ImageButton Grid.Column="0" Source="DeclineCall.png" Aspect="AspectFit" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="60" WidthRequest="120" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,25,0"/>
+                            <ImageButton Grid.Column="1" Source="AcceptCall.png" Aspect="AspectFit"  BackgroundColor="#19B933" Command="{Binding AcceptCall}" CornerRadius="30" HeightRequest="60" WidthRequest="120" HorizontalOptions="Center" VerticalOptions="Center" Padding="10" Margin="25,0,0,0"/>
+                        </Grid>
+                    </Frame>
+                    <ImageButton Grid.Row="1" IsVisible="{Binding IsAccept}" Source="DeclineCall.png" Aspect="AspectFill" BackgroundColor="#E74705" Command="{Binding CancelCall}" CornerRadius="30" HeightRequest="60" WidthRequest="120" HorizontalOptions="Center" VerticalOptions="Center" Padding="20"/>
 
                 </Grid>
             </Frame>
-            
-            <!--<Frame Grid.Row="1" CornerRadius="20" BackgroundColor="White">
-                <StackLayout>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="3*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Frame Grid.Column="0" IsVisible="{Binding IsIncoming}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" BorderColor="Black" BackgroundColor="Gray" CornerRadius="50">
-                            <Frame.GestureRecognizers>
-                                <SwipeGestureRecognizer Direction="Up" Command="{Binding Path=BindingContext.AcceptCall, Source={x:Reference callPage}}"/>
-                            </Frame.GestureRecognizers>
-                            <Grid Margin="2" Padding="5">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="2*"/>
-                                    </Grid.RowDefinitions>
-                                    <Label Grid.Row="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Green" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    <Label Grid.Row="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Green" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    <Frame Grid.Row="2" CornerRadius="90" BackgroundColor="Green">
-                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" TextColor="White" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    </Frame>
-                                </Grid>
-                            </Grid>
-                        </Frame>
-
-                        <Frame Grid.Column="0" IsVisible="{Binding IsAccept}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" CornerRadius="20">
-                            <Grid>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <Frame Grid.Row="0" CornerRadius="90" BackgroundColor="{Binding MicButtonColor}" BorderColor="Black">
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.MuteCall, Source={x:Reference callPage}}"/>
-                                        </Frame.GestureRecognizers>
-                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" TextColor="{Binding MicLabelTextColor}" Text="&#xEC71;" FontSize="30"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-
-                                    </Frame>
-                                    <Frame Grid.Row="1" CornerRadius="90" BackgroundColor="{Binding SpeakerButtonColor}" BorderColor="Black">
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.SpeakerCall, Source={x:Reference callPage}}"/>
-                                        </Frame.GestureRecognizers>
-                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE767;" TextColor="{Binding SpeakerLabelTextColor}" FontSize="30"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    </Frame>
-                                </Grid>
-                            </Grid>
-                        </Frame>
-
-                        <Frame Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" BorderColor="Black" BackgroundColor="Gray" CornerRadius="50">
-                            <Frame.GestureRecognizers>
-                                <SwipeGestureRecognizer Direction="Up" Command="{Binding Path=BindingContext.CancelCall, Source={x:Reference callPage}}"/>
-                            </Frame.GestureRecognizers>
-                            <Grid Margin="2" Padding="5">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="2*"/>
-                                    </Grid.RowDefinitions>
-                                    <Label Grid.Row="0" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Red" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    <Label Grid.Row="1" FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE96D;" TextColor="Red" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    <Frame Grid.Row="2" CornerRadius="90" BackgroundColor="Red">
-                                        <Label FontFamily="Segoe MDL2 Assets.ttf#Segoe MDL2 Assets" Text="&#xE717;" FontSize="30" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                    </Frame>
-                                </Grid>
-                            </Grid>
-                        </Frame>
-                    </Grid>
-
-                </StackLayout>
-            </Frame>!-->
-            <!--<Button Grid.Row="2" x:Name="resumeButton" Text="Возобновить" IsVisible="{Binding IsPaused}" Command="{Binding ResumeCall}"/>!-->
+                     
         </Grid>
     </ContentPage.Content>
 </ContentPage>

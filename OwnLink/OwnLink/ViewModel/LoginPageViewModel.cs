@@ -84,11 +84,7 @@ namespace OwnLink.ViewModel
 
             callFlag = 0;
 
-            CountryName = CrossSettings.Current.GetValueOrDefault("sipPhoneCountry", "");
-            cPref = CrossSettings.Current.GetValueOrDefault("sipPhoneCountryPref", "");
-
-            if (Phone == "")
-                Phone = cPref;
+            
 
             CounrtyListVisible = false;
             IsResultTextVisible = false;
@@ -115,6 +111,15 @@ namespace OwnLink.ViewModel
                     SelectCountry();
                 }
             }
+            CountryName = CrossSettings.Current.GetValueOrDefault("sipPhoneCountry", "");
+            cPref = CrossSettings.Current.GetValueOrDefault("sipPhoneCountryPref", "");
+            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+            if (Phone == "")
+            {
+                Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneTmpLogin", "");
+                if (Phone == "")
+                    Phone = cPref;
+            }
         }
 
         public void endPage()
@@ -126,6 +131,7 @@ namespace OwnLink.ViewModel
         public void sendCall()
         {
             IsResultTextVisible = false;
+            CrossSettings.Current.AddOrUpdateValue("sipPhoneTmpLogin", Phone);
             HttpControler.register(Phone, "","","");          
         }
 
@@ -163,6 +169,7 @@ namespace OwnLink.ViewModel
                     }
                     else
                     {
+                        CrossSettings.Current.AddOrUpdateValue("sipPhoneTmpLogin", "");
                         CrossSettings.Current.AddOrUpdateValue("sipPhoneLogin", tmp.login);
                         CrossSettings.Current.AddOrUpdateValue("sipPhonePass", tmp.password);
                         Navigation.PushAsync(new MasterDetailMain());
@@ -220,13 +227,15 @@ namespace OwnLink.ViewModel
             if (cPref == null)
                 cPref = "";
             if (cPref.Length > 0)
-            {
+            {               
                 if (Phone.Length < cPref.Length)
                 {
                     Phone = cPref;
                 }
                 else
                 {
+                    if (Phone[0] != '+')
+                        Phone = "+" + Phone;
                     string curPref = Phone.Substring(0, cPref.Length);
                     if (curPref != cPref)
                     {

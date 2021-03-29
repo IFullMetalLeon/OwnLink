@@ -60,7 +60,7 @@
             
             <Frame BackgroundColor="White" Margin="10,15,10,15" BorderColor="White" HasShadow="False" IsVisible="{Binding IsNumberVisible}" Padding="0" > 
                 <StackLayout>
-                    <Entry x:Name="phoneEntry" Placeholder="Номер телефона" Keyboard="Telephone" Text="{Binding Phone}" TextChanged="phoneEntry_TextChanged"/>
+                    <Entry x:Name="phoneEntry" Placeholder="Номер телефона" Keyboard="Telephone" Text="{Binding Phone,Mode=TwoWay}" TextChanged="phoneEntry_TextChanged"/>
                     <Label x:Name="sendResult" Text="{Binding ResultText}" IsVisible="{Binding IsResultTextVisible}" TextColor="{Binding ResultTextColor}" FontSize="14"/>
                     <Frame BackgroundColor="White" Margin="0,15,0,15" IsVisible="{Binding IsCodeSmsVisible}" HasShadow="False" Padding="0">
                         <StackLayout>
