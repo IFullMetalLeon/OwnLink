@@ -58,7 +58,7 @@ namespace OwnLink.ViewModel
             CountryTap = new Command(CountryListShow);
             ICallText = "Звонок-подтверждение";
             ICallEnb = true;
-            Phone = "";
+            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneTmpLogin", "");
             cPref = "";
             IsCodeSmsVisible = false;
             callJournal = DependencyService.Get<ICallJournal>();
@@ -71,7 +71,7 @@ namespace OwnLink.ViewModel
 
         public void startPage()
         {
-            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");            
+            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneTmpLogin", "");            
             
             MessagingCenter.Subscribe<string, string>("HttpControler", "Register", (sender, arg) =>
             {
@@ -113,10 +113,10 @@ namespace OwnLink.ViewModel
             }
             CountryName = CrossSettings.Current.GetValueOrDefault("sipPhoneCountry", "");
             cPref = CrossSettings.Current.GetValueOrDefault("sipPhoneCountryPref", "");
-            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
+            Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneTmpLogin", "");
             if (Phone == "")
             {
-                Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneTmpLogin", "");
+                Phone = CrossSettings.Current.GetValueOrDefault("sipPhoneLogin", "");
                 if (Phone == "")
                     Phone = cPref;
             }
@@ -257,7 +257,7 @@ namespace OwnLink.ViewModel
             {
                 ICallText = "Новый запрос через " + _countdown.ToString();
 
-                if (callFlag == 0)
+                /*if (callFlag == 0)
                 {
                     string lastPhone = callJournal.GetLastNumber();
                     if (lastPhone == "111")
@@ -267,7 +267,7 @@ namespace OwnLink.ViewModel
                         CodeSms = lastPhone.Substring(lastPhone.Length - 4, 4);
                         callFlag = 1;
                     }
-                }
+                }*/
                 return true;
             }
             else

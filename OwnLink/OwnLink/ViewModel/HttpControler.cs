@@ -16,7 +16,10 @@ namespace OwnLink.ViewModel
 
         public static async void register(string _phone,string _code,string _deviceId,string _deviceInfo)
         {
-            HttpClient http = new HttpClient();
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient http = new HttpClient(clientHandler);
             http.BaseAddress = new Uri(mainUrl + "register");
             var values = new Dictionary<string, string>();
             values.Add("phone", _phone);
@@ -48,7 +51,10 @@ namespace OwnLink.ViewModel
         public static async void feedbackSend(string _email,string _text,string _token,string _file)
         {
 
-            HttpClient http = new HttpClient();
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient http = new HttpClient(clientHandler);
             http.BaseAddress = new Uri(mainUrl + "feedback");
 
 
@@ -86,7 +92,10 @@ namespace OwnLink.ViewModel
 
         public static async void history(string _phone, string _deviceId)
         {
-            HttpClient http = new HttpClient();
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient http = new HttpClient(clientHandler);
             http.BaseAddress = new Uri(mainUrl + "history");
             var values = new Dictionary<string, string>();
             values.Add("phone", _phone);
@@ -112,7 +121,10 @@ namespace OwnLink.ViewModel
         {
             try
             {
-                HttpClient http = new HttpClient();
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+                HttpClient http = new HttpClient(clientHandler);
                 http.Timeout = TimeSpan.FromMinutes(5);
 
                 string addr = "http://ic.pismo-fsin.ru/upgrade/version";
@@ -136,7 +148,10 @@ namespace OwnLink.ViewModel
 
         public static async void FCMTokenSend(string _phone, string _fcmId,string _deviceId)
         {
-            HttpClient http = new HttpClient();
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient http = new HttpClient(clientHandler);
             http.BaseAddress = new Uri(mainUrl + "firebase");
             var values = new Dictionary<string, string>();
             values.Add("phone", _phone);
@@ -160,7 +175,10 @@ namespace OwnLink.ViewModel
 
         public static async void ErrorLogSend(string _phone, string _device_info, string _deviceId,string _text)
         {
-            HttpClient http = new HttpClient();
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient http = new HttpClient(clientHandler);
             http.BaseAddress = new Uri(mainUrl + "crash_report");
             var values = new Dictionary<string, string>();
             values.Add("phone", _phone);
